@@ -226,7 +226,6 @@
     },
     data() {
       return {
-        src: require('@/assets/images/4.png'),
         items: this.item.length
       }
     },

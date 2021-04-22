@@ -28,7 +28,7 @@
 </template>
 
 <script>
-  import { mapActions } from 'vuex';
+
   import Header from './templates/Header.vue';
   import Slider from './Slider.vue';
   import Store from './Store.vue';
@@ -43,19 +43,7 @@
       appFooter: Footer,
       MessageComponent,
     },
-    data() {
-      return {
-        src: require('@/assets/images/4.png')
-      }
-    },
-    methods: {
-      ...mapActions(['getShoppingCart', 'listenToProductList'])
-    },
-    created() {
-      let uid = this.$store.getters.currentUser.uid;
-      this.listenToProductList();
-      this.getShoppingCart({uid, currentCart: this.$store.getters.cartItemList});
-    }
+
     
   }
 </script>
