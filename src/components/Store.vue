@@ -1,28 +1,36 @@
 <template>
-<div>
-  <h2 style="text-align:center; margin-top: 20px; margin-bottom: 20px;"></h2>
+  <div>
+    <h2 style="text-align: center; margin-top: 20px; margin-bottom: 20px"></h2>
+    <div class="container" :class="{ loadingItem: isProductLoading }">
+      <div class="row text-center" v-if="isProductLoading">
+        <grid-loader
+          :loading="isProductLoading"
+          :color="loaderColor"
+          :size="loaderSize"
+        ></grid-loader>
+      </div>
 
-<div class="container" :class="{loadingItem: isProductLoading}">
-   
-  <div class="row text-center" v-if="isProductLoading">
-    <grid-loader :loading="isProductLoading" :color="loaderColor" :size="loaderSize"></grid-loader>
+      <div class="row" v-if="!isProductLoading">
+        <app-product-item
+          v-for="prod in products"
+          :item="prod"
+          :key="prod.id"
+          :length="products.length"
+          :displayList="displayList"
+        ></app-product-item>
+      </div>
+      <div style="margin-bottom: 25px"></div>
+    </div>
   </div>
-
-
-  <div class="row" v-if="!isProductLoading">
-    <app-product-item v-for="prod in products" :item="prod" :key="prod.id" :length="products.length" :displayList="displayList"></app-product-item>
-  </div>
-  <div style="margin-bottom:25px"></div>
-</div>
-</div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import ProductItem from './product/ProductItem.vue';
-import GridLoader from 'vue-spinner/src/GridLoader.vue';
-import base from '@/router/link.js'; 
-import axios from "axios";
+import { mapGetters } from "vuex";
+import ProductItem from "./product/ProductItem.vue";
+import GridLoader from "vue-spinner/src/GridLoader.vue";
+import voucher from "@/controller/voucher.js";
+// import base from "@/router/link.js";
+// import axios from "axios";
 
 export default {
   data() {
@@ -30,15 +38,15 @@ export default {
       loaderColor: "#5cb85c",
       loaderSize: "50px",
       displayList: false,
-      products: []
-    }
+      products: [],
+    };
   },
   computed: {
-    ...mapGetters([/* 'products' , */ 'isProductLoading']),
+    ...mapGetters([/* 'products' , */ "isProductLoading"]),
   },
   components: {
     appProductItem: ProductItem,
-    GridLoader
+    GridLoader,
   },
   mounted() {
     this.getItem();
@@ -47,13 +55,16 @@ export default {
     changeDisplay(isList) {
       this.displayList = isList;
     },
-    getItem () {
-    axios
-    .get(base.url + "products" )
-    .then(response => (this.products = response.data))
-  }
-  }
-}
+    getItem() {
+      voucher.list().then((res) => {
+        this.products = res;
+      });
+      // axios
+      //   .get(base.url + "products")
+      //   .then((response) => (this.products = response.data));
+    },
+  },
+};
 </script>
 
 <style >

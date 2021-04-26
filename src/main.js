@@ -16,27 +16,37 @@ import './plugins/element.js'
 import './assets/css/all.min.css'
 import lineClamp from 'vue-line-clamp'
 import ScrollFixedHeader from 'vuejs-scroll-fixed-header'
-
+import axios from "axios"
 Vue.use(ScrollFixedHeader)
 Vue.component('v-select', vSelect)
 Vue.use(VueRouter, ElementUI);
 Vue.use(Carousel);
 Vue.use(CarouselItem);
 Vue.use(BootstrapVue)
-// Optionally install the BootstrapVue icon components plugin
+    // Optionally install the BootstrapVue icon components plugin
 Vue.use(IconsPlugin)
 firebaseListener(authStatusChange);
 Vue.use(lineClamp, {
-	// plugin options
-  })
-
+    // plugin options
+})
+axios.defaults.baseURL = "https://projects.papermindvention.com/oracle/backend/api/";
+Vue.use(axios)
 const router = new VueRouter({
-	mode: 'history',
-	routes,
-	VueperSlide,
-	VueperSlides
+    mode: 'history',
+    routes,
+    base: '/oracle',
+    VueperSlide,
+    VueperSlides
 });
-
+Vue.mixin({
+    methods: {
+        formatPrice(value) {
+            let val = (value / 1).toFixed(0).replace(".", ",");
+            let res = val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            return "Rp." + res;
+        }
+    },
+});
 // router.beforeEach((to, from, next) => {
 //     if (to.onlyGuest && store.getters.isLoggedIn) {
 //         next('/');
@@ -47,20 +57,20 @@ const router = new VueRouter({
 
 
 new Vue({
-  el: '#app',
-  router,
-  store,
-  render: h => h(App)
+    el: '#app',
+    router,
+    store,
+    render: h => h(App)
 })
 
 
 
 function authStatusChange(loggedIn, user) {
-	if (store) {
-		store.commit('AUTH_STATUS_CHANGE');
-		if (user) {
-			store.dispatch('getShoppingCart', {uid: user.uid, currentCart: store.getters.cartItemList});
-		}
-	}
+    if (store) {
+        store.commit('AUTH_STATUS_CHANGE');
+        if (user) {
+            store.dispatch('getShoppingCart', { uid: user.uid, currentCart: store.getters.cartItemList });
+        }
+    }
 
 }

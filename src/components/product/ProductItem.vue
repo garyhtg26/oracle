@@ -1,6 +1,9 @@
 <template>
-<div class="mb-3 col-sm-3 col-md-2 item" :class="{'list-group-item': displayList}">
-  <!-- <router-link :to="'/product/' + item.id">
+  <div
+    class="mb-3 col-sm-3 col-md-2 item"
+    :class="{ 'list-group-item': displayList }"
+  >
+    <!-- <router-link :to="'/product/' + item.id">
   <div class="card">
     <div class="img-event intrinsic">
       <img :src="item.photos.length > 0 ? item.photos[0].photo : false" alt="" class="grow thumbnail-image card-img-top intrinsic-item p-3">
@@ -9,52 +12,45 @@
 
    </router-link> -->
 
-   <!-- dummy -->
-    <router-link :to="'/product/' + item.id">
-   <div class="">
-    <div class="img-event ">
-      <img :src="require('@/assets/images/products/FF.png')" class="grow thumbnail-image card-img-top ">
-    </div>
+    <!-- dummy -->
+    <router-link :to="'/product/' + item.name.replace(/\s/g, '+')">
+      <div class="">
+        <div class="img-event">
+          <img :src="item.icon" class="grow thumbnail-image card-img-top" />
+        </div>
+      </div>
+    </router-link>
   </div>
-
-   </router-link>
-
-</div>
 </template>
 
 <script>
-import {
-  mapActions
-} from 'vuex';
+import { mapActions } from "vuex";
 export default {
   props: ["item", "displayList"],
   methods: {
-    ...mapActions(['updateCart']),
+    ...mapActions(["updateCart"]),
     addItem() {
       const order = {
         item: Object.assign({}, this.item),
         quantity: 1,
-        isAdd: true
+        isAdd: true,
       };
       this.updateCart(order);
-    }
+    },
   },
   filters: {
     shortDescription(value) {
       if (value && value.length > 100) {
-        return value.substring(0, 100) + '...';
+        return value.substring(0, 100) + "...";
       } else {
         return value;
       }
-    }
+    },
   },
-  
-}
+};
 </script>
 
 <style lang="scss" scoped>
-
-
 .card-text {
   font-size: 0.875rem;
 }
@@ -64,7 +60,7 @@ export default {
 }
 
 .grow {
-  transition: all .2s ease-in-out;
+  transition: all 0.2s ease-in-out;
 }
 
 .grow:hover {
@@ -95,9 +91,9 @@ export default {
 
   .thumbnail-image {
     position: static;
+    background-color: blueviolet;
+    min-height: 200px;
   }
-
-
 
   @media (max-width: 767.98px) {
     .img-event {
@@ -114,6 +110,4 @@ export default {
     }
   }
 }
-
-
 </style>
