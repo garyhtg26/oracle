@@ -232,8 +232,20 @@ td {
   padding-right:20px
 }
 .navbar {
-  padding: 0px  !important;
+  padding: 0rem 1rem  !important;
 }
+@media (max-width: 576px) {
+    .input-group {
+      height: 50px;
+      width: 100%  !important;
+    }
+    .el-select{
+      width: 100% !important;
+    }
+    .btn.login {
+      margin: 20px;
+    }
+  }
 a.nav-link {
  font-size: 15px;
      height: 60px;

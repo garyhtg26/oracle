@@ -5,8 +5,8 @@
     <div class="page-heading">
       <div class="container">
         <div class="row">
-          <div class="col-6"></div>
-          <div class="col-offset-1 col-6 ng-scope heading-content" v-if="!$store.state.user.name">
+          <div class="col-md-6 hidden-xs hidden-sm"></div>
+          <div class="col-offset-1 col-md-6 col-sm-12 ng-scope heading-content" v-if="!$store.state.user.name">
             <div class="section" style="padding: 30px">
               <h2 class="mb-4">Masukan No HP</h2>
               <div>
@@ -288,4 +288,17 @@ h6,
   line-height: 1.3;
   color: white;
 }
+
+@media (max-width: 576px) {
+    .input-group {
+      height: 50px;
+      width: 100%  !important;
+    }
+    .el-select{
+      width: 100% !important;
+    }
+    .btn.login {
+      margin: 20px;
+    }
+  }
 </style>
