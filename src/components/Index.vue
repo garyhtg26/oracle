@@ -2,14 +2,38 @@
   <div class="d-flex flex-column sticky-footer-wrapper">
     <main class="flex-fill">
       <app-header></app-header>
-      <app-slider></app-slider>
+      <div class="container mt-3">
+        <div class="row">
+          <div class="col-md-6 col-sm-12">
+               <app-slider></app-slider>
+          </div>
+          <div class="col-md-6 col-sm-12">
+            <div class="row mt-5">
+               <div class="col-6 berita">
+                <img class="berita-img" :src="berita">
+                <div class="berita-title my-2">Ganjar Launching Aplikasi Karya Anak Jawa Tengah</div>
+                <div class="link-berita">www.mediaindonesia.com</div>
+              </div>
+              <div class="col-6 berita">
+                <img class="berita-img" :src="berita">
+                <div class="berita-title my-2">Ganjar Launching Aplikasi Karya Anak Jawa Tengah</div>
+                <div class="link-berita">www.mediaindonesia.com</div>
+              </div>      
+            </div>
+          </div>
+        </div>
+      </div>
+     
       <message-component></message-component>
       <div class="container product" style="background-color: #232323"></div>
-      <div class="container my-5" style="background-color: #232323">
+      <div class="container " style="background-color: #232323">
         <div class="row">
           <div class="col-md-12">
             <h6 class="mx-4 mt-4" style="color:white">Mobile</h6>
             <app-store></app-store>
+             <div style="margin-top: -2px; width: 100%">
+                <el-image class="banner-top" :src="banner"></el-image>
+            </div>
             <h6 class="mx-4 mt-4" style="color:white">PC Games</h6>
             <h6 class="mx-4 mt-4" style="color:white">Others</h6>
             <div
@@ -45,6 +69,8 @@ export default {
   data() {
     return {
       src: require("@/assets/images/4.png"),
+      berita: require("@/assets/images/berita1.jpeg"),
+      banner: require("@/assets/images/banner.png"),
     };
   },
   methods: {
@@ -82,6 +108,25 @@ a {
 body,
 .sticky-footer-wrapper {
   min-height: 100vh;
+}
+.berita {
+  cursor: pointer;
+}
+.berita-img{
+  height: 175px;
+  border-radius: 20px;
+}
+.berita-title{
+  color: #F9B410;
+  font-size: 14px;
+  line-height: 16px;
+  font-weight: 500;
+}
+.link-berita{
+  font-weight: normal;
+font-size: 12px;
+line-height: 14px;
+color: white;
 }
 .child {
   text-align: center;

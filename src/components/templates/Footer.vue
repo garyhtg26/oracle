@@ -2,21 +2,22 @@
     <footer class="footer">
     <div class="container">
 		<img
-              :src="require('@/assets/images/logo.png')"
+              :src="require('@/assets/images/logo2.png')"
               alt="Oracle"
-              width="150px"
+              width="100px"
               style="padding-bottom:40px"
             />
         <div class="row">
         <div class="col-sm-4">
-            <h4 class="title">Info Kontak</h4>
-            <p><i class="fas fa-map-marker-alt"></i> Jalan xxxx No.xx Kec.xxxx, Kel. xxxx, Kota xxxx</p>
+            <h4 class="title" >ADDRESS</h4>
+            <p><i class="fas fa-map-marker-alt"></i> Gg. Mpu Suro No.825, Pandeyan, Kec. Umbulharjo
+Kota Yogyakarta, Daerah Istimewa Yogyakarta 55161, Indonesia</p>
             <p><i class="fas fa-phone-alt"></i> 012-3456-7890</p>
-            <p><i class="fas fa-envelope"></i> customer@oracle.com</p>
+            <p><i class="fas fa-envelope"></i> customer@yellowins.com</p>
      
         </div>
         <div class="col-sm-4">
-            <h4 class="title">Social Media</h4>
+            <h4 class="title" >Social Media</h4>
            
             <ul class="social-icon">
                 <a href="#" class="social"><i class="fab fa-facebook" aria-hidden="true"></i></a>
@@ -38,7 +39,7 @@
             </div>
         </div>
         <hr>
-        <div class="row text-center" style="justify-content: center;"><a style="color: #fff;">Copyright © 2021 <span style="">Oracle.</span> All right reserved.</a></div>
+        <div class="row text-center" style="justify-content: center;"><a style="color: #F9B410;">Copyright © 2021 <span style="">Yellowins.</span> All right reserved.</a></div>
     </div>	
 </footer>
 </template>
@@ -50,6 +51,7 @@ export default {
 </script>
 
 <style scoped>
+
 .unf-footer-android {
     background-image: url(https://ecs7.tokopedia.net/assets-unify/img/ic-download-android.svg);
     width: 135px;
@@ -77,6 +79,7 @@ export default {
   background-size: contain;
   background-repeat: no-repeat;
 }
+
 .footer {
     padding: 50px 0 20px 0;
     background-color: #232323;
@@ -84,7 +87,7 @@ export default {
 }
 .footer .title{
 	text-align: left;
-	color:#fff;
+	color:#F9B410;
 	text-transform: uppercase;
 	font-size:15px;
 }

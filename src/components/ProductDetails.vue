@@ -1,10 +1,11 @@
 <template>
   <div>
     <app-header></app-header>
-    <div
+    <!-- <div
       class="page-heading"
       :style="`background-image: url(${!products[0] || products[0].icon_url})`"
-    >
+    > -->
+    <div class="page-heading">
       <div class="container">
         <div class="row">
           <div class="col-6"></div>
@@ -243,6 +244,7 @@ export default {
 .page-heading {
   height: 300px;
   background-size: cover;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),url(../assets/images/background.png);
   opacity: 0.9;
 }
 .buletan {

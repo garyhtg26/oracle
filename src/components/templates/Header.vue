@@ -3,12 +3,12 @@
     <scroll-fixed-header :fixed.sync="fixed" :threshold="56">
       <div>
   <b-navbar toggleable="lg" type="dark" variant="dark">
-    <b-navbar-brand href="#">
+    <b-navbar-brand href="#" class="ml-3">
       <router-link to="/">
                 <img
-                  :src="require('@/assets/images/logo.png')"
+                  :src="require('@/assets/images/logo-yellow.png')"
                   alt="Oracle"
-                  width="150px"
+                  width="250px"
                   style="padding: 20px"
                 />
               </router-link>
@@ -17,22 +17,26 @@
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
     <b-collapse id="nav-collapse" is-nav>
-      <b-navbar-nav>
+      <!-- <b-navbar-nav>
         <b-nav-item href="/" active class="mr-4">HOME</b-nav-item>
         <b-nav-item href="/premium" class="mr-4">PREMIUM</b-nav-item>
         <b-nav-item href="#" class="mr-4">DOWNLOAD</b-nav-item>
-      </b-navbar-nav>
+      </b-navbar-nav> -->
 
       <!-- Right aligned nav items -->
       
-        <div class="input-group md-form form-sm form-2 pl-1" style="overflow: hidden;">
-          <div class="el-select" style="border-color: white !important; border-radius: 20px; width: 50%; cursor: alias !important;">
+        
+        <b-navbar-nav  class="ml-auto" style="height:40px">
+          
+          <!-- <b-nav-form>
+       <div class="input-group md-form form-sm form-2 pl-1" style="overflow: hidden;">
+          <div class="el-select" style="border-color: white !important; border-radius: 20px; width: 100%; cursor: alias !important;">
           <div class="el-input el-input--suffix is-focus">
             <input type="text" autocomplete="" placeholder="Search" style="cursor:auto" class="el-input__inner">
             <span class="el-input__suffix">
               <span class="el-input__suffix-inner" >
                 <i class="el-select__caret el-input__icon el-icon-"></i>
-              </span><!---->
+              </span>
             </span>
           </div>
           </div>
@@ -43,35 +47,26 @@
             </span>
           </div>
         </div>
-        <b-navbar-nav  class="ml-auto">
-         <b-button
-                v-b-modal.modal-login
-                class="login "
-                v-if="!$store.state.user.name"
-              >
-                <div
-                  style="
-                    padding: 3px;
-                    line-height: 17px;
-                    margin-left: 6px;
-                    margin-right: 6px;
-                  "
-                >
-                  login<span class="fa fa-chevron-right ml-2"></span>
-                </div>
-              </b-button>
-           
-              <div
-                style="
-                  padding: 10px;
-                  line-height: 17px;
-                  border-radius: 20px;
-                  background-color: white;
-                "
-                v-else
-              >
-                {{ $store.state.user.name }}
-              </div>
+        </b-nav-form> -->
+        <div class="search mr-4">
+          <el-input placeholder="Search" v-model="search" icon="el-icon-search"></el-input>
+        <i class="fa fa-search" style="color: #F9B410; padding:10px"></i>
+        </div>
+        
+        <b-nav-item href="/premium" class="mr-4">PREMIUM</b-nav-item>
+        <b-nav-item href="#" class="mr-4">DOWNLOAD</b-nav-item>
+        <b-nav-item v-if="!$store.state.user.name" v-b-modal.modal-login class="mr-5">LOGIN</b-nav-item>
+        
+              <b-nav-item-dropdown 
+              class="mr-5"
+                right
+                v-else>
+          <!-- Using 'button-content' slot -->
+                  <template #button-content>
+                   <em>{{ $store.state.user.name }}</em>
+                 </template>
+                  <b-dropdown-item @click="logoutUser">Sign Out</b-dropdown-item>
+               </b-nav-item-dropdown>
             
       </b-navbar-nav>
     </b-collapse>
@@ -81,7 +76,7 @@
     <!-- modal -->
 <b-modal id="modal-login" title="BootstrapVue" hide-footer>
    <div class="child">
-      <h5 >Login</h5>
+      <h5 style="color:#F9B410" >Login</h5>
       <p>Selamat datang kembali</p>
       <p style="font-size:12px; " class="mx-5">Masukkan nomor telepon Anda dan kami akan mengirimkan kode verifikasi Anda</p>
       <div class="md-form " style="border-bottom: 1px solid white; margin-left:120px; margin-right:120px">
@@ -99,7 +94,7 @@
 </b-modal>
 <b-modal id="modal-verification" title="BootstrapVue" hide-footer>
    <div class="child">
-      <h5 >Verification</h5>
+      <h5 style="color:#F9B410">Verification</h5>
       <p>Selamat datang kembali</p>
       <p style="font-size:12px; " class="mx-5">Enter your verification code below that we send to you. we send to your SMS</p>
       <div>
@@ -115,7 +110,7 @@
 </b-modal>
 <b-modal id="modal-bank" title="BootstrapVue" hide-footer>
    <div class="child">
-      <h5 >Silahkan Pilih Bank</h5>
+      <h5 style="color:#F9B410">Silahkan Pilih Bank</h5>
 
       <p style="font-size:12px; " class="mx-5">Kami akan memberi Anda instruksi tentang cara menyelesaikan transfer di ATM atau di aplikasi Mobile Banking</p>
       <div>
@@ -142,7 +137,7 @@
 </b-modal>
 <b-modal id="modal-detail" title="BootstrapVue" hide-footer>
    <div class="">
-      <h5 class="child">Detail Pesanan</h5>
+      <h5 style="color:#F9B410" class="child">Detail Pesanan</h5>
 
       <p style="font-size:12px; " class="child mx-5">Mohon konfirmasi pembayaran anda sudah benar.</p>
       <div>
@@ -193,6 +188,7 @@ export default {
   data() {
     return {
       fixed: false,
+      search:'',
       isNavOpen: false,
       modal: false,
       selected: null,
@@ -219,9 +215,13 @@ export default {
   },
   methods: {
     ...mapActions(["logout"]),
+    logoutUser() {
+      this.logout();
+    },
     toggleNavbar() {
       this.isNavOpen = !this.isNavOpen;
     },
+    
   },
 };
 </script>
@@ -246,27 +246,17 @@ td {
       margin: 20px;
     }
   }
-a.nav-link {
- font-size: 15px;
-     height: 60px;
-    margin-top: 20px;
-}
-
-.nav-link.active {
-  border-bottom: 2px solid #096866;
 
 
-}
-
-.navbar-dark .navbar-nav .nav-link {
-    color: white  !important;
+::v-deep .navbar-dark .navbar-nav .nav-link {
+    color: #F9B410 !important;
 }
 .btn-secondary {
   background-color: #4c4e50;
   border-color: #4c4e50;
 }
 .bg-dark {
-    background-color: #232323 !important;
+    background-color: #1c1c1e  !important;
 }
 
 .login {
@@ -317,6 +307,32 @@ a.nav-link {
   background-color: #fff;
 }
 
+.search {
+  -ms-flex-preferred-size: 100%;
+    flex-basis: 100%;
+    -webkit-box-flex: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    display: -webkit-box!important;
+    display: -ms-flexbox!important;
+    display: flex!important;
+    -ms-flex-preferred-size: auto;
+    flex-basis: auto;
+  border: 1px solid #F9B410 !important;
+  border-radius: 10px !important;
+}
+
+::v-deep .el-input__inner {
+
+    background-color: transparent !important;
+    color: white  !important;
+
+    border: none !important
+}
+
 // .border-bottom {
 //     border-bottom: 1px solid #e5e7ea !important;
 // }
@@ -347,7 +363,7 @@ a.nav-link {
 }
 .nav-link {
   color: #000;
-  font-size: 1.1em;
+
 }
 .input-group {
     position: relative;
