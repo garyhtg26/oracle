@@ -3,28 +3,28 @@
     <div class="container">
 		<img
               :src="require('@/assets/images/logo2.png')"
-              alt="Oracle"
+              alt="Yellowins"
               width="100px"
               style="padding-bottom:40px"
             />
         <div class="row">
         <div class="col-sm-4">
             <h4 class="title" >ADDRESS</h4>
-            <p><i class="fas fa-map-marker-alt"></i> Gg. Mpu Suro No.825, Pandeyan, Kec. Umbulharjo
+            <p><i class="fa fa-map-marker mr-1"></i> Gg. Mpu Suro No.825, Pandeyan, Kec. Umbulharjo
 Kota Yogyakarta, Daerah Istimewa Yogyakarta 55161, Indonesia</p>
-            <p><i class="fas fa-phone-alt"></i> 012-3456-7890</p>
-            <p><i class="fas fa-envelope"></i> customer@yellowins.com</p>
+            <p><i class="fa fa-phone mr-1"></i> 012-3456-7890</p>
+            <p><i class="fa fa-envelope mr-1"></i> customer@yellowins.com</p>
      
         </div>
         <div class="col-sm-4">
             <h4 class="title" >Social Media</h4>
            
             <ul class="social-icon">
-                <a href="#" class="social"><i class="fab fa-facebook" aria-hidden="true"></i></a>
-                <a href="#" class="social"><i class="fab fa-twitter" aria-hidden="true"></i></a>
-                <a href="#" class="social"><i class="fab fa-instagram" aria-hidden="true"></i></a>
-                <a href="#" class="social"><i class="fab fa-youtube" aria-hidden="true"></i></a>
-                <a href="#" class="social"><i class="fab fa-telegram-plane" aria-hidden="true"></i></a>
+                <a href="#" class="social"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+                <a href="#" class="social"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+                <a href="#" class="social"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                <a href="#" class="social"><i class="fa fa-youtube" aria-hidden="true"></i></a>
+                <a href="#" class="social"><i class="fa fa-telegram" aria-hidden="true"></i></a>
 
             </ul>
         </div>

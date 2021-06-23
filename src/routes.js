@@ -4,6 +4,7 @@ import Login from './components/auth/Login.vue';
 import Register from './components/auth/Register.vue';
 import ProductList from './components/ProductList.vue';
 import Premium from './components/Premium.vue';
+import Payment from './components/Payment.vue';
 
 
 export const routes = [
@@ -11,6 +12,7 @@ export const routes = [
 	{path: '/product/:id', component: ProductDetails, name: 'product'},
 	{path: '/list', component: ProductList, name: 'productlist'},
 	{path: '/premium', component: Premium, name: 'premium'},
+	{path: '/payment/:id', component: Payment, name: 'payment'},
 	{path: '/login', component: Login, name: 'login', onlyGuest: true },
 	{path: '/register', component: Register, name: 'register', onlyGuest: true},
 

@@ -1,9 +1,10 @@
-import axios from "axios"
+import axios from 'axios'
 export default {
-    async list() {
-        return axios.get('voucher/list').then(res => {
+    async list($store) {
+        return axios.get('voucher/list').then((res) => {
+            $store.commit('items', res.data)
             return Object.keys(res.data).map(function(val) {
-                const data = res.data;
+                const data = res.data
                 return {
                     name: val,
                     icon: !data[val][0] || data[val][0].icon_url,
@@ -12,10 +13,14 @@ export default {
             })
         })
     },
-    async show(name) {
-        return axios.get('voucher/show/' + name)
+    async show(name, $store) {
+        const products = $store.state.items
+        return {
+            data: products[name],
+        }
+        // return axios.get('voucher/show/' + name)
     },
     async topup() {
         return axios.post('voucher/topup')
-    }
+    },
 }

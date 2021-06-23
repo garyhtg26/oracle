@@ -39,5 +39,7 @@ export default {
         }
         return axios.post('transaction/topup', forms)
     },
-
+    async redeem(forms) {
+        return axios.post('redeem', forms)
+    }
 }

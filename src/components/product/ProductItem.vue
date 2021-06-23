@@ -66,6 +66,9 @@ export default {
 .grow:hover {
   transform: scale(1.1);
 }
+.card-img-top {
+  border-radius: 20px !important;
+}
 
 .list-group-item {
   float: none;

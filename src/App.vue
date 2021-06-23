@@ -18,12 +18,12 @@ export default {
     ...mapActions(["getShoppingCart", "listenToProductList"]),
   },
   created() {
-    let uid = this.$store.getters.currentUser.uid;
-    this.listenToProductList();
-    this.getShoppingCart({
-      uid,
-      currentCart: this.$store.getters.cartItemList,
-    });
+    // let uid = this.$store.getters.currentUser.uid;
+    // this.listenToProductList();
+    // this.getShoppingCart({
+    //   uid,
+    //   currentCart: this.$store.getters.cartItemList,
+    // });
   },
 };
 </script>

@@ -1,38 +1,31 @@
 <template>
   <div>
-    <app-header></app-header>
-
+    <app-header
+      @close="Object.assign(selected, $store.state.forms)"
+      :paymentMode="paymentBank"
+    ></app-header>
     <div class="page-heading">
       <div class="container">
         <div class="row">
-          <div class="col-md-6 hidden-xs hidden-sm"></div>
-          <div class="col-offset-1 col-md-6 col-sm-12 ng-scope heading-content" v-if="!$store.state.user.name">
-            <div class="section" style="padding: 30px">
-              <h2 class="mb-4">Masukan No HP</h2>
-              <div>
-                <input
-                  class="form-input"
-                  type="text"
-                  placeholder="Silahkan masukan ID anda"
-                  v-model="form.phone"
-                />
-              </div>
-              <p class="field-instruction-text mt-2">
-                Jika Anda sudah memiliki akun, silakan masukkan Nomor HP diatas. daftar jika anda belum memiliknya.
-              </p>
-            </div>
+          <div class="col-md-6 hidden-xs hidden-sm">
+              <app-slider></app-slider>
           </div>
-          <div
-                style="
-                  padding: 10px;
-                  line-height: 17px;
-                  border-radius: 20px;
-                  background-color: white;
-                "
-                v-else
-              >
-                {{ $store.state.user.name }}
-              </div>
+              
+          <div class="col-offset-1 col-md-6 col-sm-12 ng-scope heading-content">
+             
+            <el-image class="banner-top" style="width:200px" :src="require('@/assets/images/logo2.png')"></el-image>
+          </div>
+          <!-- <div
+            style="
+              padding: 10px;
+              line-height: 17px;
+              border-radius: 20px;
+              background-color: white;
+            "
+            v-else
+          >
+            {{ $store.state.user.name }}
+          </div> -->
         </div>
       </div>
     </div>
@@ -43,93 +36,87 @@
             <div class="">
               <div class="buletan"></div>
               <div style="margin-top: 40px">
-                <h3>Oracle Premium</h3>
+                <h3>Tentang Kami</h3>
                 <p class="field-instruction-text mt-4">
-                  PERINGATAN: Metode pembayaran DANA hanya tersedia untuk
-                  Pengguna Aplikasi. Harap pastikan bahwa aplikasi DANA Anda
-                  telah diperbarui dan memiliki saldo yang mencukupi sebelum
-                  melakukan top up.
+                  YELLOWINS memudahkan topup games yang kamu inginkan setiap saat, dan  dimana saja.
+
+
                   <br /><br />
-                  Lakukan membership hanya dalam hitungan detik! Cukup masukan
-                  ID/Nomor Hp Anda yang sudah terdaftar, masukkan kode redeem
-                  Anda jika ada, kemudian selesaikan pembayaran. Setelah
-                  pembayaran berhasil Anda akan secara langsung akan menjadi
-                  membership di oracle.
+                 Ada berbagai macam top up games. Jadi meski kamu sedang bersantai, berolahraga, atau bermain bersama teman, kamu tetap bisa melakukan top up di YELLOWINS
+
                   <br /><br />
-                  Bayarlah menggunakan GoPay, OVO, DANA, hingga Transfer Bank.
-                  Oracle adalah cara terbaik untuk top up secara online tanpa
-                  kartu kredit. Anda juga dapat mendaftarkan sebagai pengguna
-                  membership dan mendapatkan diskon yang menarik.
+                  Kamu juga bisa menjadi bagian dari komunitas kami dengan menggunakan fitur YELLOWINS PREMIUM, dan dapatkan penawaran menarik setiap menitnya dari YELLOWINSSTORE.
+                  <br /><br />
+                Nikmati kemudahan bertransaksi dan jadilah pemenang bersama YELLOWINS. 
+
                 </p>
               </div>
             </div>
           </div>
           <div class="col-6 ng-scope heading-content">
-            
+            <div class="section" style="padding: 30px"  v-if="!$store.state.user.name">
+              <h2 class="mb-4">Masukan No HP</h2>
+              <div>
+                <input
+                  class="form-input"
+                  type="text"
+                  placeholder="Silahkan masukan ID anda"
+                  v-model="form.phone"
+                />
+              </div>
+              <p class="field-instruction-text mt-2">
+                Jika Anda sudah memiliki akun, silakan masukkan Nomor HP diatas.
+                daftar jika anda belum memiliknya.
+              </p>
+            </div>
+           
             <div class="section" style="padding: 30px">
-              <h2 class="mb-4">Pilih Metode Pembayaran</h2>
-              <div v-b-modal.modal-detail class="card p-2">
-                <div class="row">
-                  <div class="col-sm-7">
-                    <img
-                      :src="require('@/assets/images/payments/gopay.png')"
-                      class="payment-img"
-                    />
-                  </div>
-                  <div class="col-sm-offset-1 col-sm-5">
-                    <div class="payment-price">Rp 10.000</div>
-                  </div>
-                </div>
+              <h2 class="mb-4">Provinsi</h2>
+              <div>
+                <input
+                  class="form-input"
+                  type="text"
+                  placeholder="Silahkan masukan provinsi anda"
+                  v-model="selected.region"
+                />
               </div>
-              <div v-b-modal.modal-detail class="card p-2">
-                <div class="row">
-                  <div class="col-sm-7">
-                    <img
-                      :src="require('@/assets/images/payments/ovo.png')"
-                      class="payment-img"
-                    />
-                  </div>
-                  <div  class="col-sm-offset-1 col-sm-5">
-                    <div class="payment-price">Rp 10.000</div>
-                  </div>
+            </div>
+            <div>
+              <h4> Pilih Paket</h4>
+              <div class="row">
+                <div class="col p-2">
+                  <button type="button" class="btn btn-white active">Bronze</button>
                 </div>
-              </div>
-              <div class="card disable p-2">
-                <div class="row">
-                  <div class="col-sm-7">
-                    <img
-                      :src="require('@/assets/images/payments/dana.png')"
-                      class="payment-img"
-                    />
-                  </div>
-                  <div class="col-sm-offset-1 col-sm-5">
-                    <div class="payment-price">Rp 10.000</div>
-                  </div>
+                <div class="col p-2">
+                  <button type="button" class="btn btn-white">Silver</button>
                 </div>
-              </div>
-               <div v-b-modal.modal-detail class="card  p-2">
-                <div class="row">
-                  <div class="col-sm-7">
-                    <img
-                      :src="require('@/assets/images/payments/visa.png')"
-                      class="payment-img"
-                    />
-                  </div>
-                  <div class="col-sm-offset-1 col-sm-5">
-                    <div class="payment-price">Rp 10.000</div>
-                  </div>
+                <div class="col p-2">
+                  <button type="button" class="btn btn-white">Gold</button>
                 </div>
+                
               </div>
-               <div v-b-modal.modal-bank class="card  p-2">
+            </div>
+             <div v-if="showPayment" class="section" style="padding: 30px">
+              <h6 class="mb-4">Pilih Metode Pembayaran</h6>
+              <div
+                v-for="x in payments"
+                :key="x.code"
+                class="card p-2"
+                :class="{
+                  disable: x.disabled,
+                  active: selected.payment == x.code,
+                }"
+                @click="selPay(x)"
+              >
                 <div class="row">
                   <div class="col-sm-7">
                     <img
-                      :src="require('@/assets/images/payments/bca.png')"
+                      :src="require(`@/assets/images/payments/${x.img}.png`)"
                       class="payment-img"
                     />
                   </div>
-                  <div class="col-sm-offset-1 col-sm-5">
-                    <div class="payment-price">Rp 10.000</div>
+                  <div class="col-xs-offset-1 col-sm-5">
+                    <div class="payment-price">RP.10.000</div>
                   </div>
                 </div>
               </div>
@@ -148,7 +135,9 @@
                 abaikan jika Anda tidak memilikinya.
               </p>
             </div>
-            <button type="button" class="btn btn-light">Beli</button>
+            <button type="button" class="btn btn-light" @click="save">
+              Beli
+            </button>
           </div>
         </div>
       </div>
@@ -161,19 +150,79 @@
 <script>
 import Header from "./templates/Header";
 import Footer from "./templates/Footer";
-
+import Slider from "./Slider.vue";
+import transactions from "@/controller/transactions.js";
 export default {
   components: {
     appHeader: Header,
+        appSlider: Slider,
     appFooter: Footer,
   },
   data() {
     return {
+      payments: [
+        { img: "gopay", code: "BCA", disabled: false },
+        { img: "ovo", code: "BRI", disabled: false },
+        { img: "dana", code: "MANDIRI", disabled: true },
+        { img: "visa", code: "CREDIT_CARD", disabled: false },
+        { img: "bca", code: "VIRTUAL_ACCOUNT", disabled: false },
+      ],
+      paymentBank: "VIRTUAL_ACCOUNT",
       form: {},
+      selected: {
+        pulsa_code: "redeem",
+        pulsa_price: 10000,
+        pulsa_op: "Premium Member",
+      },
+      showPayment: true,
     };
   },
   mounted() {
+    transactions.payments().then((res) => {
+      this.$store.commit("payments", res.data);
+    });
     this.form = Object.assign({}, this.$store.state.user);
+  },
+  methods: {
+    selPay(x) {
+      if (["VIRTUAL_ACCOUNT", "CREDIT_CARD"].indexOf(x.code) > -1) {
+        this.$store.commit("forms", this.selected);
+        this.$store.commit("modalBank", true);
+        this.paymentBank = x.code;
+        console.log(this.$store.modalBank);
+        return false;
+      }
+      this.selected.payment = x.code;
+      this.showPayment = false;
+      this.$nextTick().then(() => {
+        this.showPayment = true;
+      });
+    },
+    save() {
+      const forms = {
+        region: this.selected.region,
+        payment: this.$store.state.forms.payment,
+      };
+      transactions.redeem(forms).then((e) => {
+        this.$bvToast
+          .toast(e.data.message, {
+            title: `Transaksi berhasil Berhasil`,
+            variant: "success",
+            solid: true,
+            autoHideDelay: 5000,
+            appendToast: true,
+          })
+          .catch((error) => {
+            this.$bvToast.toast(error, {
+              title: `Maaf, ada sedikit maintenance`,
+              variant: "danger",
+              solid: true,
+              autoHideDelay: 5000,
+              appendToast: true,
+            });
+          });
+      });
+    },
   },
 };
 </script>
@@ -216,19 +265,19 @@ export default {
   border-color: rgb(77, 182, 77);
 }
 .page-heading {
-  background-image: url(../assets/images/banners/3.png);
-  height: 300px;
-  background-size: cover;
+  background-image: url(../assets/images/bg.png);
+
+  background-size: contain;
   opacity: 0.9;
 }
 .buletan {
   width: 100px;
   height: 100px;
-  background-image: url(../assets/images/logo1.png);
+  background-image: url(../assets/images/logo2.png);
   background-color: white;
   background-size: cover;
 
-  border-radius: 100px;
+  border-radius: 25px;
   margin-top: -50px;
 }
 .section {
@@ -260,8 +309,16 @@ export default {
   margin-top: 40px;
 }
 .btn-light {
-  background-color: #fff !important;
-  border-color: #e5e7ea !important;
+  background-color:#F9B410  !important;
+  border-color: #ffb300 !important;
+}
+.btn-white {
+  background-color:#fff  !important;
+  border-color: #fff !important;
+}
+.btn-white.active {
+  background-color:#F9B410  !important;
+  border-color: #ffb300 !important;
 }
 .mt-3,
 .my-3 {
@@ -286,19 +343,19 @@ h6,
   margin-bottom: 0.5rem;
   font-weight: bold;
   line-height: 1.3;
-  color: white;
+  color: #F9B410
+;
 }
-
 @media (max-width: 576px) {
-    .input-group {
-      height: 50px;
-      width: 100%  !important;
-    }
-    .el-select{
-      width: 100% !important;
-    }
-    .btn.login {
-      margin: 20px;
-    }
+  .input-group {
+    height: 50px;
+    width: 100% !important;
   }
+  .el-select {
+    width: 100% !important;
+  }
+  .btn.login {
+    margin: 20px;
+  }
+}
 </style>

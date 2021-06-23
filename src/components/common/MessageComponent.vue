@@ -19,9 +19,10 @@ export default {
   computed: {
     ...mapGetters(["messages"]),
     showMessageBar() {
-      return this.messages.message && this.messages.message.length > 0;
+      return false; //this.messages.message && this.messages.message.length > 0;
     },
     messageClass() {
+      if (!this.messages) return "";
       let mgClass = this.messages.messageClass;
       return (
         "col-12 panel panel-" +
@@ -31,6 +32,7 @@ export default {
       );
     },
     currentMessage() {
+      if (!this.messages) return "";
       return this.messages.message;
     },
   },
