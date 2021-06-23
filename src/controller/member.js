@@ -13,14 +13,14 @@ export default {
     async destroy(id) {
         return axios.delete('/admin/user/' + id)
     },
-    // user
-    async index() {
-        return axios.get('/admin/user')
-    },
-    async store(data) {
-        return axios.post('/admin/user', data)
-    },
-    async update(data, id) {
-        return axios.put('/admin/user/' + id, data)
-    },
+
+    // async index() {
+    //     return axios.get('/admin/user')
+    // },
+    // async store(data) {
+    //     return axios.post('/admin/user', data)
+    // },
+    // async update(data, id) {
+    //     return axios.put('/admin/user/' + id, data)
+    // },
 }
