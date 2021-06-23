@@ -17,6 +17,7 @@ import App from "./App.vue";
 import lineClamp from "vue-line-clamp";
 import ScrollFixedHeader from "vuejs-scroll-fixed-header";
 import axios from "axios";
+import './registerServiceWorker'
 Vue.use(ScrollFixedHeader);
 Vue.component("v-select", vSelect);
 Vue.use(VueRouter);
