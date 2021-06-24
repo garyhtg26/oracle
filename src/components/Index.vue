@@ -153,6 +153,12 @@ body,
 .berita-img {
   height: 105px;
 }
+.img-event{
+  padding: 50px;
+}
+h6 {
+  font-size: 32px !important;
+}
 }
 .berita-title {
   color: #f9b410;

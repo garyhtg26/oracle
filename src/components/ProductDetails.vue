@@ -340,7 +340,7 @@ export default {
   background-size: cover;
 
   border-radius: 25px;
-  margin-top: -50px;
+
 
 }
 .mt-3,
