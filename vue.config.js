@@ -2,18 +2,24 @@
 module.exports = {
     // ...other vue-cli plugin options...
     pwa: {
-      name: 'My App',
-      themeColor: '#4DBA87',
+      name: 'Yellowins',
+      themeColor: '#F9B410',
+      
+      manifestOptions: {
+        name: 'Yellowins',
+        short_name: 'Yellowins',
+        start_url: './',
+        scope: '.',
+        display: 'standalone',
+        theme_color: '#F9B410'
+      },
+      iconPaths: {
+        favicon32: '@/assets/images/logo2.png',
+      },
       msTileColor: '#000000',
       appleMobileWebAppCapable: 'yes',
-      appleMobileWebAppStatusBarStyle: 'black',
+      appleMobileWebAppStatusBarStyle: 'yellow',
    
-      // configure the workbox plugin
-      workboxPluginMode: 'InjectManifest',
-      workboxOptions: {
-        // swSrc is required in InjectManifest mode.
-        swSrc: 'dev/sw.js',
-        // ...other Workbox options...
-      }
+     
     }
   }

@@ -113,9 +113,12 @@
                 </div>
               </div>
             </div>
-            <button type="button" @click="topUp" class="btn btn-light">
+            <router-link :to="'/payment/' + $route.params.id.replace(/\s/g, '+')">
+               <button type="button" @click="topUp" class="btn btn-light">
               Beli
             </button>
+            </router-link>
+
           </div>
         </div>
       </div>

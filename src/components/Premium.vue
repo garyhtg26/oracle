@@ -84,13 +84,13 @@
             <div>
               <h4> Pilih Paket</h4>
               <div class="row">
-                <div class="col p-2">
+                <div class="col ">
                   <button type="button" class="btn btn-white active">Bronze</button>
                 </div>
-                <div class="col p-2">
+                <div class="col">
                   <button type="button" class="btn btn-white">Silver</button>
                 </div>
-                <div class="col p-2">
+                <div class="col ">
                   <button type="button" class="btn btn-white">Gold</button>
                 </div>
                 
