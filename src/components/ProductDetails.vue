@@ -193,11 +193,11 @@ export default {
       confirmation: false,
       selp: "",
       payments: [
-        { img: "gopay", code: "GOPAY", disabled: true },
+        { img: "alfamart", code: "ALFAMART", disabled: true },
         { img: "ovo", code: "OVO", disabled: false },
         { img: "dana", code: "DANA", disabled: false },
-        { img: "visa", code: "CREDIT_CARD", disabled: false },
-        { img: "bca", code: "VIRTUAL_ACCOUNT", disabled: false },
+        { img: "shopeepay", code: "SHOPEEPAY", disabled: false },
+        { img: "atm", code: "VIRTUAL_ACCOUNT", disabled: false },
       ],
     };
   },
