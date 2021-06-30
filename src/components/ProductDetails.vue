@@ -3,20 +3,22 @@
     <app-header
       @close="Object.assign(selected, $store.state.forms)"
       :paymentMode="paymentBank"
+      :confirm="confirmation"
+      :onTopup="topUp"
+      @cancel="confirmation = $event"
     ></app-header>
-    <div
-      class="page-heading"
-     
-    >
-     <!-- :style="`background-image: url(${!products[0] || products[0].icon_url})`" -->
+    <div class="page-heading">
+      <!-- :style="`background-image: url(${!products[0] || products[0].icon_url})`" -->
       <!-- <div class="page-heading"> -->
       <div class="container">
         <div class="row">
           <div class="col-md-6 hidden-xs hidden-sm">
-               <app-slider></app-slider>
+            <app-slider></app-slider>
           </div>
-          <div class="col-offset-1 col-md-6 col-sm-12 ng-scope heading-content ">
-           <div class="mt-5">
+          <div
+            class="col-offset-1 mx-auto col-md-6 col-sm-12 ng-scope heading-content"
+          >
+            <div class="mt-5">
               <img class="buletan" :src="`${icon_url}`" />
               <div style="margin-top: 40px">
                 <h6>{{ $route.params.id.replace(/[+]/g, " ") }}</h6>
@@ -35,22 +37,26 @@
         <div class="row">
           <div class="col-md-6 col-sm-12">
             <div class="yellowins"></div>
-              <div style="margin-top: 40px">
-                <h3>Tentang Kami</h3>
-                <p class="field-instruction-text mt-4">
-                  YELLOWINS memudahkan topup games yang kamu inginkan setiap saat, dan  dimana saja.
+            <div style="margin-top: 40px">
+              <h3>Tentang Kami</h3>
+              <p class="field-instruction-text mt-4">
+                YELLOWINS memudahkan topup games yang kamu inginkan setiap saat,
+                dan dimana saja.
 
+                <br /><br />
+                Ada berbagai macam top up games. Jadi meski kamu sedang
+                bersantai, berolahraga, atau bermain bersama teman, kamu tetap
+                bisa melakukan top up di YELLOWINS
 
-                  <br /><br />
-                 Ada berbagai macam top up games. Jadi meski kamu sedang bersantai, berolahraga, atau bermain bersama teman, kamu tetap bisa melakukan top up di YELLOWINS
-
-                  <br /><br />
-                  Kamu juga bisa menjadi bagian dari komunitas kami dengan menggunakan fitur YELLOWINS PREMIUM, dan dapatkan penawaran menarik setiap menitnya dari YELLOWINSSTORE.
-                  <br /><br />
-                Nikmati kemudahan bertransaksi dan jadilah pemenang bersama YELLOWINS. 
-
-                </p>
-              </div>
+                <br /><br />
+                Kamu juga bisa menjadi bagian dari komunitas kami dengan
+                menggunakan fitur YELLOWINS PREMIUM, dan dapatkan penawaran
+                menarik setiap menitnya dari YELLOWINSSTORE.
+                <br /><br />
+                Nikmati kemudahan bertransaksi dan jadilah pemenang bersama
+                YELLOWINS.
+              </p>
+            </div>
           </div>
           <div class="col-12 col-md-6 ng-scope heading-content">
              <div class="section" style="padding: 30px">
@@ -68,6 +74,37 @@
                 tercantum di bawah nama karakter Anda. Contoh: '1234567890'.
               </p>
             </div>
+            <div class="row">
+              <div class="col">
+                   <div class="section" style="padding: 30px">
+              <h6 class="mb-4">Masukan Game ID</h6>
+              <div>
+                <input
+                  class="form-input"
+                  type="text"
+                  v-model="selected.hp"
+                  placeholder="ID anda"
+                />
+              </div>
+          
+            </div>
+              </div>
+              <div class="col">
+                   <div class="section" style="padding: 30px">
+              <h6 class="mb-4">Masukan Server ID</h6>
+              <div>
+                <input
+                  class="form-input"
+                  type="text"
+                  v-model="selected.hp"
+                  placeholder="Server ID anda"
+                />
+              </div>
+           
+            </div>
+              </div>
+            </div>
+           
             <div class="section" style="padding: 30px">
               <h2 class="mb-4">Pilih Nominal Top Up</h2>
               <div class="row">
@@ -75,11 +112,16 @@
                   v-for="x in products"
                   :key="x.pulsa_code"
                   class="col-md-4 col-6"
-                  @click="selected = x"
+                  @click="x.status !== 'empty' ? (selected = x) : false"
                 >
                   <div
                     class="card"
-                    :class="{ active: selected.pulsa_code === x.pulsa_code }"
+                    style="max-height: 40px; overflow: hidden"
+                    :title="x.pulsa_nominal"
+                    :class="{
+                      active: selected.pulsa_code === x.pulsa_code,
+                      disable: x.status === 'empty',
+                    }"
                   >
                     {{ x.pulsa_nominal }}
                   </div>
@@ -94,7 +136,7 @@
                 class="card p-2"
                 :class="{
                   disable: x.disabled,
-                  active: selected.payment == x.code
+                  active: selp == x.code,
                 }"
                 @click="selPay(x)"
               >
@@ -113,12 +155,9 @@
                 </div>
               </div>
             </div>
-            <router-link :to="'/payment/' + $route.params.id.replace(/\s/g, '+')">
-               <button type="button" @click="topUp" class="btn btn-light">
+            <button type="button" @click="topUp" class="btn btn-light">
               Beli
             </button>
-            </router-link>
-
           </div>
         </div>
       </div>
@@ -147,104 +186,134 @@ export default {
       loaderSize: "50px",
       products: [],
       selected: {
-        pulsa_price: 0
+        pulsa_price: 0,
       },
       paymentBank: "VIRTUAL_ACCOUNT",
       showPayment: true,
+      confirmation: false,
+      selp: "",
       payments: [
-        { img: "gopay", code: "BCA", disabled: false },
-        { img: "ovo", code: "BRI", disabled: false },
-        { img: "dana", code: "MANDIRI", disabled: true },
+        { img: "gopay", code: "GOPAY", disabled: true },
+        { img: "ovo", code: "OVO", disabled: false },
+        { img: "dana", code: "DANA", disabled: false },
         { img: "visa", code: "CREDIT_CARD", disabled: false },
-        { img: "bca", code: "VIRTUAL_ACCOUNT", disabled: false }
-      ]
+        { img: "bca", code: "VIRTUAL_ACCOUNT", disabled: false },
+      ],
     };
   },
   watch: {
     "$route.params.id"() {
       this.getItem();
-    }
+    },
   },
   computed: {
     icon_url() {
       return this.products.length > 0
         ? this.products[0].icon_url
         : "https://projects.papermindvention.com/oracle/backend/public/images/Bleach Mobile 3D.png";
-    }
+    },
   },
   methods: {
     addItem() {
       const order = {
         item: Object.assign({}, this.item),
         quantity: 1,
-        isAdd: true
+        isAdd: true,
       };
-      // console.log(order);
       this.updateCart(order);
     },
+
     selPay(x) {
       if (["VIRTUAL_ACCOUNT", "CREDIT_CARD"].indexOf(x.code) > -1) {
         this.$store.commit("forms", this.selected);
         this.$store.commit("modalBank", true);
         this.paymentBank = x.code;
-        console.log(this.$store.modalBank);
+        this.selp = x.code;
+        return false;
+      }
+      const cek = this.payments.filter((y) => y.code == x.code)[0];
+      if (cek && cek.disabled) {
+        this.$bvToast.toast(`Pembayaran dengan ${x.code} belum didukung`, {
+          title: `Pembayaran tidak valid`,
+          variant: "error",
+          solid: true,
+          autoHideDelay: 2000,
+          appendToast: true,
+        });
         return false;
       }
       this.selected.payment = x.code;
       this.showPayment = false;
+      this.selp = x.code;
       this.$nextTick().then(() => {
         this.showPayment = true;
       });
     },
     getItem() {
       const name = this.$route.params.id.replace(/[+]/g, " ");
-      voucher.show(name, this.$store).then(res => {
+      voucher.show(name, this.$store).then((res) => {
         console.log(res);
         this.products = res.data;
       });
     },
     topUp() {
-      this.selected.no_hp = this.$store.state.user.phone;
+      this.selected.no_hp = this.$store.state.user.phone || "0000";
+      this.confirmation = false;
       const { selected } = this;
       if (!selected.payment || !selected.hp || !selected.no_hp) {
-        alert("Harap lengkapi data");
-        this.$bvToast.toast("Login", {
-          title: `Silahkan login terlebih dahulu`,
+        this.$bvToast.toast("Game id tidak boleh kosong", {
+          title: `Harap lengkapi data terlebih dahulu`,
           variant: "error",
           solid: true,
-          autoHideDelay: 2000,
-          appendToast: true
+          autoHideDelay: 3000,
+          appendToast: true,
         });
         return false;
       }
       transactions
         .store(this.selected)
-        .then(e => {
+        .then((e) => {
           this.$bvToast.toast(e.data.message, {
             title: `Transaksi berhasil Berhasil`,
             variant: "success",
             solid: true,
             autoHideDelay: 5000,
-            appendToast: true
+            appendToast: true,
           });
+          this.prePay(e.data);
         })
-        .catch(error => {
+        .catch((error) => {
           this.$bvToast.toast(error, {
             title: `Maaf, ada sedikit maintenance`,
             variant: "danger",
             solid: true,
             autoHideDelay: 5000,
-            appendToast: true
+            appendToast: true,
           });
         });
-    }
+    },
+    prePay(e) {
+      this.selected.preview = e;
+      if (e.src) {
+        this.$store.commit("forms", this.selected);
+        this.$router.push(`/payment/${this.$route.params.id}`);
+      } else {
+        this.$bvToast.toast("Transaksi error", {
+          title: `Maaf, ada sedikit maintenance`,
+          variant: "danger",
+          solid: true,
+          autoHideDelay: 5000,
+          appendToast: true,
+        });
+      }
+    },
   },
   mounted() {
     this.getItem();
-    transactions.payments().then(res => {
+    transactions.payments().then((res) => {
       this.$store.commit("payments", res.data);
     });
-  }
+  },
 };
 </script>
 
@@ -282,7 +351,7 @@ export default {
   cursor: not-allowed !important;
 }
 .card.active {
-  background-color:#F9B410  !important;
+  background-color: #f9b410 !important;
   border-color: #ffb300 !important;
 }
 .page-heading {
@@ -297,7 +366,7 @@ export default {
   background-size: cover;
   background-position: top;
   border-radius: 25px;
-  margin-top: -50px;
+  margin-top: -50px
 }
 .section {
   background-color: #232323;
@@ -328,11 +397,10 @@ export default {
   margin-top: 40px;
 }
 .btn-light {
-  background-color: #F9B410 !important;
+  background-color: #f9b410 !important;
   border-color: #ffb300 !important;
 }
-.yellowins{
-
+.yellowins {
   width: 100px;
   height: 100px;
   background-image: url(../assets/images/logo2.png);
@@ -340,7 +408,6 @@ export default {
   background-size: cover;
 
   border-radius: 25px;
-
 
 }
 .mt-3,
@@ -366,7 +433,6 @@ h6,
   margin-bottom: 0.5rem;
   font-weight: bold;
   line-height: 1.3;
-  color: #F9B410
-;
+  color: #f9b410;
 }
 </style>

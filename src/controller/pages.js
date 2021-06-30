@@ -1,13 +1,13 @@
 import axios from 'axios'
 
 export default {
-    async index() {
-        return axios.get('pages').then((res) => {
+    async index(slide) {
+        return axios.get('pages', { params: { is_slider: slide } }).then((res) => {
             return res.data
         })
     },
     async store(data) {
-        let fd = new FormData();
+        let fd = new FormData()
         fd.append('title', data.title)
         fd.append('description', data.description)
         fd.append('photo', data.file)
@@ -16,7 +16,7 @@ export default {
         return axios.post('/admin/pages', fd)
     },
     async update(data) {
-        let fd = new FormData();
+        let fd = new FormData()
         fd.append('title', data.title)
         fd.append('description', data.description)
         fd.append('photo', data.file)
@@ -26,5 +26,5 @@ export default {
     },
     async destroy(id) {
         return axios.delete('/admin/pages/' + id)
-    }
+    },
 }

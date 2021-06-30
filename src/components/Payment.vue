@@ -4,19 +4,16 @@
       @close="Object.assign(selected, $store.state.forms)"
       :paymentMode="paymentBank"
     ></app-header>
-    <div
-      class="page-heading"
-     
-    >
-     <!-- :style="`background-image: url(${!products[0] || products[0].icon_url})`" -->
+    <div class="page-heading">
+      <!-- :style="`background-image: url(${!products[0] || products[0].icon_url})`" -->
       <!-- <div class="page-heading"> -->
       <div class="container">
         <div class="row">
           <div class="col-md-6 hidden-xs hidden-sm">
-               <app-slider></app-slider>
+            <app-slider></app-slider>
           </div>
-          <div class="col-offset-1 col-md-6 col-sm-12 ng-scope heading-content ">
-           <div class="mt-5">
+          <div class="col-offset-1 col-md-6 col-sm-12 ng-scope heading-content">
+            <div class="mt-5">
               <img class="buletan" :src="`${icon_url}`" />
               <div style="margin-top: 40px">
                 <h6>{{ $route.params.id.replace(/[+]/g, " ") }}</h6>
@@ -35,74 +32,94 @@
         <div class="row">
           <div class="col-md-6 col-sm-12">
             <div class="yellowins"></div>
-              <div style="margin-top: 40px">
-                <h3>Tentang Kami</h3>
-                <p class="field-instruction-text mt-4">
-                  YELLOWINS memudahkan topup games yang kamu inginkan setiap saat, dan  dimana saja.
+            <div style="margin-top: 40px">
+              <h3>Tentang Kami</h3>
+              <p class="field-instruction-text mt-4">
+                YELLOWINS memudahkan topup games yang kamu inginkan setiap saat,
+                dan dimana saja.
 
+                <br />
+                <br />
+                Ada berbagai macam top up games. Jadi meski kamu sedang
+                bersantai, berolahraga, atau bermain bersama teman, kamu tetap
+                bisa melakukan top up di YELLOWINS
 
-                  <br /><br />
-                 Ada berbagai macam top up games. Jadi meski kamu sedang bersantai, berolahraga, atau bermain bersama teman, kamu tetap bisa melakukan top up di YELLOWINS
-
-                  <br /><br />
-                  Kamu juga bisa menjadi bagian dari komunitas kami dengan menggunakan fitur YELLOWINS PREMIUM, dan dapatkan penawaran menarik setiap menitnya dari YELLOWINSSTORE.
-                  <br /><br />
-                Nikmati kemudahan bertransaksi dan jadilah pemenang bersama YELLOWINS. 
-
-                </p>
-              </div>
+                <br />
+                <br />
+                Kamu juga bisa menjadi bagian dari komunitas kami dengan
+                menggunakan fitur YELLOWINS PREMIUM, dan dapatkan penawaran
+                menarik setiap menitnya dari YELLOWINSSTORE.
+                <br />
+                <br />
+                Nikmati kemudahan bertransaksi dan jadilah pemenang bersama
+                YELLOWINS.
+              </p>
+            </div>
           </div>
-          <div class="col-12 col-md-6 ng-scope heading-content">
-             <div class="section" style="padding: 30px">
+          <div
+            class="col-12 col-md-6 ng-scope heading-content"
+            v-if="$store.state.forms.preview"
+          >
+            <div class="section" style="padding: 30px">
               <h4 class="mb-4">Selesaikan pembayaran Anda</h4>
-              <p style="color:white">Mohon melakukan pembayaran di mini-market dalam waktu 24 jam untuk menyelesaikan pembelian anda.</p>
-              <hr style="    border-top: 1px solid rgb(255 255 255 / 50%);">
+              <p style="color: white">
+                Transaksi akan dibatalkan dalam waktu 24 jam, silahkan lakukan
+                pembayaran untuk menyelesaikan transaksi anda
+              </p>
+              <hr style="border-top: 1px solid rgb(255 255 255 / 50%)" />
+              <div style="width: 100%; height: 500px">
+                <iframe
+                  width="100%"
+                  height="500px"
+                  :src="$store.state.forms.preview.src"
+                  frameborder="0"
+                ></iframe>
+              </div>
+              <hr style="border-top: 1px solid rgb(255 255 255 / 50%)" />
               <div>
                 <h3>Rincian Pembelian</h3>
-                <p style="color:white">720 Diamon</p>
+                <p style="color: white">720 Diamon</p>
               </div>
-              <table class="mt-4" border="0" style="color:white">
-            <tr>
-              <td>Nama</td>
-              <td>: {{ $store.state.forms.pulsa_op }}</td>
-            </tr>
-            <tr>
-              <td>ID</td>
-              <td>: {{ $store.state.forms.pulsa_code }}</td>
-            </tr>
-            <tr>
-              <td>Harga</td>
-              <td>: {{ $store.state.forms.pulsa_price }}</td>
-            </tr>
-            <tr>
-              <td>Bayar dengan</td>
-              <td>: {{ $store.state.forms.payment }}</td>
-            </tr>
-            <tr>
-              <td>Order id</td>
-              <td>
-                :
-                {{ orderId }}
-              </td>
-            </tr>
-            <tr>
-              <td>Kode Pembayaran</td>
-              <td>: {{ orderId }}</td>
-            </tr>
-            <tr>
-              <td>Status</td>
-              <td>: {{ $store.state.forms.status }}</td>
-            </tr>
-          </table>
-            <router-link to="/">
-            <button type="button"  class="btn btn-light">
-              Lakukan pembelian lain
-            </button>
-            </router-link>
-              
+              <table class="mt-4" border="0" style="color: white">
+                <tr>
+                  <td>Nama</td>
+                  <td>: {{ $store.state.forms.pulsa_op }}</td>
+                </tr>
+                <tr>
+                  <td>ID</td>
+                  <td>: {{ $store.state.forms.pulsa_code }}</td>
+                </tr>
+                <tr>
+                  <td>Harga</td>
+                  <td>: {{ formatPrice($store.state.forms.pulsa_price) }}</td>
+                </tr>
+                <tr>
+                  <td>Bayar dengan</td>
+                  <td>: {{ $store.state.forms.payment }}</td>
+                </tr>
+                <tr>
+                  <td>Order id</td>
+                  <td>
+                    :
+                    {{ orderId }}
+                  </td>
+                </tr>
+                <tr>
+                  <td>Kode Pembayaran</td>
+                  <td>: {{ orderId }}</td>
+                </tr>
+                <tr>
+                  <td>Status</td>
+                  <td>: {{ $store.state.forms.status }}</td>
+                </tr>
+              </table>
+
+              <router-link to="/">
+                <button type="button" class="btn btn-light">
+                  Lakukan pembelian lain
+                </button>
+              </router-link>
             </div>
-           
-            
           </div>
         </div>
       </div>
@@ -131,7 +148,7 @@ export default {
       loaderSize: "50px",
       products: [],
       selected: {
-        pulsa_price: 0
+        pulsa_price: 0,
       },
       paymentBank: "VIRTUAL_ACCOUNT",
       showPayment: true,
@@ -140,28 +157,32 @@ export default {
         { img: "ovo", code: "BRI", disabled: false },
         { img: "dana", code: "MANDIRI", disabled: true },
         { img: "visa", code: "CREDIT_CARD", disabled: false },
-        { img: "bca", code: "VIRTUAL_ACCOUNT", disabled: false }
-      ]
+        { img: "bca", code: "VIRTUAL_ACCOUNT", disabled: false },
+      ],
     };
   },
   watch: {
     "$route.params.id"() {
       this.getItem();
-    }
+    },
   },
   computed: {
+    orderId() {
+      const date = new Date();
+      return `${date.getUTCDate()}${date.getUTCHours()}`;
+    },
     icon_url() {
       return this.products.length > 0
         ? this.products[0].icon_url
-        : "https://projects.papermindvention.com/oracle/backend/public/images/Bleach Mobile 3D.png";
-    }
+        : require("@/assets/images/logo2.png");
+    },
   },
   methods: {
     addItem() {
       const order = {
         item: Object.assign({}, this.item),
         quantity: 1,
-        isAdd: true
+        isAdd: true,
       };
       // console.log(order);
       this.updateCart(order);
@@ -182,7 +203,7 @@ export default {
     },
     getItem() {
       const name = this.$route.params.id.replace(/[+]/g, " ");
-      voucher.show(name, this.$store).then(res => {
+      voucher.show(name, this.$store).then((res) => {
         console.log(res);
         this.products = res.data;
       });
@@ -197,38 +218,42 @@ export default {
           variant: "error",
           solid: true,
           autoHideDelay: 2000,
-          appendToast: true
+          appendToast: true,
         });
         return false;
       }
       transactions
         .store(this.selected)
-        .then(e => {
+        .then((e) => {
           this.$bvToast.toast(e.data.message, {
             title: `Transaksi berhasil Berhasil`,
             variant: "success",
             solid: true,
             autoHideDelay: 5000,
-            appendToast: true
+            appendToast: true,
           });
         })
-        .catch(error => {
+        .catch((error) => {
           this.$bvToast.toast(error, {
             title: `Maaf, ada sedikit maintenance`,
             variant: "danger",
             solid: true,
             autoHideDelay: 5000,
-            appendToast: true
+            appendToast: true,
           });
         });
-    }
+    },
   },
   mounted() {
     this.getItem();
-    transactions.payments().then(res => {
-      this.$store.commit("payments", res.data);
-    });
-  }
+    // transactions.payments().then((res) => {
+    //   this.$store.commit("payments", res.data);
+    // });
+  },
+  beforeRouteLeave(to, from, next) {
+    this.$store.commit("forms", {});
+    next();
+  },
 };
 </script>
 
@@ -281,7 +306,7 @@ export default {
   background-size: cover;
   background-position: top;
   border-radius: 25px;
-  margin-top: -50px;
+
 }
 .section {
   background-color: #232323;
@@ -312,11 +337,10 @@ export default {
   margin-top: 40px;
 }
 .btn-light {
-  background-color: #F9B410 !important;
+  background-color: #f9b410 !important;
   border-color: #ffb300 !important;
 }
-.yellowins{
-
+.yellowins {
   width: 100px;
   height: 100px;
   background-image: url(../assets/images/logo2.png);
@@ -324,7 +348,6 @@ export default {
   background-size: cover;
 
   border-radius: 25px;
-
 
 }
 .mt-3,
@@ -350,7 +373,6 @@ h6,
   margin-bottom: 0.5rem;
   font-weight: bold;
   line-height: 1.3;
-  color: #F9B410
-;
+  color: #f9b410;
 }
 </style>

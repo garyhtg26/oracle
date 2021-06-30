@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="mb-3 col-sm-3 col-md-2 item"
-    :class="{ 'list-group-item': displayList }"
-  >
+  <div class="mb-3 item" :class="{ 'list-group-item': displayList }">
     <!-- <router-link :to="'/product/' + item.id">
   <div class="card">
     <div class="img-event intrinsic">
@@ -65,9 +62,6 @@ export default {
 
 .grow:hover {
   transform: scale(1.1);
-}
-.card-img-top {
-  border-radius: 20px !important;
 }
 
 .list-group-item {

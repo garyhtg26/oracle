@@ -2,48 +2,58 @@
   <div class="d-flex flex-column sticky-footer-wrapper">
     <main class="flex-fill">
       <app-header></app-header>
-      <div class="page-heading">
       <div class="container mt-3">
-        <div class="row">
-          <div class="col-md-6 col-sm-12">
+        <b-row>
+          <b-col cols="12" md="6">
             <app-slider></app-slider>
-          </div>
-          <div class="col-md-6 col-sm-12">
-            <div class="row mt-5">
-              <div class="col-6 berita">
-                <img class="berita-img" :src="berita" />
-                <div class="berita-title my-2">
-                  Ganjar Launching Aplikasi Karya Anak Jawa Tengah
-                </div>
-                <div class="link-berita">www.mediaindonesia.com</div>
-              </div>
-              <div class="col-6 berita">
-                <img class="berita-img" :src="berita" />
-                <div class="berita-title my-2">
-                  Ganjar Launching Aplikasi Karya Anak Jawa Tengah
-                </div>
-                <div class="link-berita">www.mediaindonesia.com</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+          </b-col>
+          <b-col cols="12" md="6">
+            <b-row>
+              <b-col cols="6" v-for="x in news" :key="x.id">
+                <a
+                  :href="x.description"
+                  target="_blank"
+                  class="berita"
+                  style="text-decoration: none"
+                >
+                  <img
+                    class="berita-img"
+                    :src="x.photo"
+                    style="max-width: 100%"
+                  />
+                  <div class="berita-title my-2">
+                    {{ x.title }}
+                  </div>
+                  <div class="link-berita">{{ x.description }}</div>
+                </a>
+              </b-col>
+            </b-row>
+          </b-col>
+        </b-row>
       </div>
 
       <message-component></message-component>
       <div class="container product" style="background-color: #232323"></div>
-      <div class="container" style="background-color: #232323">
+      <div class="container" style="background-color: #232323; margin-bottom:50px;">
         <div class="row">
           <div class="col-md-12">
-            <h6 class="mx-4 mt-4" style="color: white;">Mobile</h6>
-            <app-store :category="mobile"></app-store>
-            <div style="margin-top: -2px; width: 100%;">
+            <h6 class="mx-4 mt-4" style="color: white">Mobile</h6>
+            <app-store
+              :category="pc"
+              :products="products"
+              :reverse="true"
+            ></app-store>
+            <!-- <div style="margin-top: -2px; width: 100%;">
               <el-image class="banner-top" :src="banner"></el-image>
-            </div>
-            <h6 class="mx-4 mt-4" style="color: white;">PC Games</h6>
-            <app-store :category="pc"></app-store>
-            <h6 class="mx-4 mt-4" style="color: white">Games</h6>
-            <app-store :category="others"></app-store>
+            </div> -->
+            <h6 class="mx-4 mt-4" style="color: white">PC Games</h6>
+            <app-store
+              :category="pc"
+              :products="products"
+              :reverse="false"
+            ></app-store>
+            <!-- <h6 class="mx-4 mt-4" style="color: white">Games</h6>
+            <app-store :category="others"></app-store> -->
             <div
               class="card panel-warning d-none d-sm-flex"
               id="reset-store-panel"
@@ -63,6 +73,8 @@ import Slider from "./Slider.vue";
 import Store from "./Store.vue";
 import Footer from "./templates/Footer.vue";
 import MessageComponent from "./common/MessageComponent.vue";
+import pages from "@/controller/pages.js";
+import voucher from "@/controller/voucher.js";
 
 export default {
   components: {
@@ -74,6 +86,7 @@ export default {
   },
   data() {
     return {
+      news: [],
       src: require("@/assets/images/4.png"),
       others: [
         "Gemscool",
@@ -103,15 +116,27 @@ export default {
         "Speed Drifters",
         "Ragnarok M",
       ],
-      pc: ["Battlenet SEA", "Mobile Legend", "Point Blank", "PUBG PC"],
+      pc: ["Voucher PB Zepetto", "Valorant"],
       berita: require("@/assets/images/berita1.jpeg"),
       banner: require("@/assets/images/banner.png"),
+      products: [],
     };
   },
   methods: {
     ...mapActions(["getShoppingCart", "listenToProductList"]),
+    getItem() {
+      this.isProductLoading = true;
+      voucher.list(this.$store).then((res) => {
+        this.products = res;
+        this.$store.commit("products", res);
+        this.isProductLoading = false;
+      });
+    },
   },
-  created() {},
+  created() {
+    pages.index(0).then((e) => (this.news = e));
+    this.getItem();
+  },
 };
 </script>
 
@@ -139,26 +164,17 @@ body,
 }
 .berita {
   cursor: pointer;
+  text-decoration: none;
+  text-decoration-line: none;
+  text-decoration-thickness: 0px;
+}
+.berita a {
+  color: #ffffff;
+  text-decoration: none;
 }
 .berita-img {
   height: 175px;
   border-radius: 20px;
-}
-@media (max-width: 1199px) {
-.berita-img {
-  height: 135px;
-}
-}
-@media (max-width: 991px) {
-.berita-img {
-  height: 105px;
-}
-.img-event{
-  padding: 50px;
-}
-h6 {
-  font-size: 32px !important;
-}
 }
 .berita-title {
   color: #f9b410;
@@ -171,6 +187,10 @@ h6 {
   font-size: 12px;
   line-height: 14px;
   color: white;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
 }
 .child {
   text-align: center;
@@ -202,12 +222,6 @@ h6 {
   background: #232323;
   color: white;
   width: 13px;
-}
-.page-heading {
-  background-image: url(../assets/images/bg.png);
-
-  background-size: contain;
-  opacity: 0.9;
 }
 /* footer {
     height: 40px;

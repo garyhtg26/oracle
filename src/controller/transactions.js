@@ -30,8 +30,8 @@ export default {
         // }
         const forms = {
             buyer_sku_code: data.pulsa_code,
-            customer_no: data.hp,
-            customer_id: data.no_hp,
+            customer_no: data.no_hp,
+            customer_id: data.hp,
             price: data.pulsa_price,
             category: data.pulsa_op,
             status: 'Pending',
@@ -39,7 +39,11 @@ export default {
         }
         return axios.post('transaction/topup', forms)
     },
-    async redeem(forms) {
-        return axios.post('redeem', forms)
+    async redeem(forms, $store) {
+        return axios.post('redeem', forms, {
+            headers: {
+                'Authorization': `Bearer ${$store.state.authentication}`
+            }
+        })
     }
 }

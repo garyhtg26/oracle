@@ -1,26 +1,25 @@
 <template>
-  <div style="padding: 25px; margin-left: 25px; margin-right: 25px">
-    <vueper-slides 
-    class="no-shadow"
-     arrows-outside 
-     bullets-outside 
-     transition-speed="250"
-     autoplay
-     fixed-height="250px"
+  <div style="padding: 5px; margin-left: 5px; margin-right: 5px">
+    <vueper-slides
+      class="no-shadow"
+      arrows-outside
+      bullets-outside
+      transition-speed="250"
+      autoplay
+      fixed-height="250px"
       :arrows="false"
       :pause-on-hover="pauseOnHover"
       @autoplay-pause="internalAutoPlaying = false"
       @autoplay-resume="internalAutoPlaying = true"
-     >
-  <vueper-slide
+    >
+      <vueper-slide
         v-for="(slide, i) in slides"
         :key="slide.id"
-        
         :content="slide.content"
         :image="slide.photo"
         :style="'background-color: ' + ['#42b983', '#ff5252'][i % 2]"
       />
-</vueper-slides>
+    </vueper-slides>
     <!-- <vueper-slides
       arrows-outside
       bullets-outside
@@ -76,7 +75,7 @@ export default {
     ],
   }),
   mounted() {
-    pages.index().then((e) => (this.slides = e));
+    pages.index(1).then((e) => (this.slides = e));
   },
 };
 </script>

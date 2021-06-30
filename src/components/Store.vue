@@ -9,19 +9,16 @@
           :size="loaderSize"
         ></grid-loader>
       </div>
-      <!-- <pre>
 
-      {{ products.map((x) => x.name) }}
-      </pre> -->
-      <div class="row" v-if="!isProductLoading">
-        <app-product-item
-          v-for="prod in products"
-          :item="prod"
-          :key="prod.id"
-          :length="products.length"
-          :displayList="displayList"
-        ></app-product-item>
-      </div>
+      <b-row v-if="!isProductLoading">
+        <b-col v-for="prod in lists" :key="prod.id" cols="6" sm="3" md="2">
+          <app-product-item
+            :item="prod"
+            :length="products.length"
+            :displayList="displayList"
+          ></app-product-item>
+        </b-col>
+      </b-row>
       <div style="margin-bottom: 25px"></div>
     </div>
   </div>
@@ -31,46 +28,41 @@
 // import { mapGetters } from "vuex";
 import ProductItem from "./product/ProductItem.vue";
 import GridLoader from "vue-spinner/src/GridLoader.vue";
-import voucher from "@/controller/voucher.js";
+// import voucher from "@/controller/voucher.js";
 // import base from "@/router/link.js";
 // import axios from "axios";
 export default {
   props: {
     category: Array,
+    reverse: Boolean,
+    products: Array,
   },
   data() {
     return {
       loaderColor: "#5cb85c",
       loaderSize: "50px",
       displayList: false,
-      products: [],
       isProductLoading: false,
     };
   },
   // computed: {
   //   ...mapGetters([/* 'products' , */ "isProductLoading"]),
   // },
+  computed: {
+    lists() {
+      return this.reverse
+        ? this.products.filter((x) => this.category.indexOf(x.name) == -1)
+        : this.products.filter((x) => this.category.indexOf(x.name) > -1);
+    },
+  },
   components: {
     appProductItem: ProductItem,
     GridLoader,
   },
-  mounted() {
-    this.getItem();
-  },
+
   methods: {
     changeDisplay(isList) {
       this.displayList = isList;
-    },
-    getItem() {
-      this.isProductLoading = true;
-      voucher.list(this.$store).then((res) => {
-        this.products = res;
-        this.$store.commit("products", res);
-        this.isProductLoading = false;
-      });
-      // axios
-      //   .get(base.url + "products")
-      //   .then((response) => (this.products = response.data));
     },
   },
 };

@@ -17,9 +17,7 @@
           <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
           <b-collapse id="nav-collapse" is-nav>
- 
-            <b-navbar-nav class="ml-auto" >
-          
+            <b-navbar-nav class="ml-auto">
               <div class="search mr-4">
                 <el-input
                   placeholder="Search"
@@ -36,12 +34,12 @@
                   triggers="click focus"
                   :placement="'bottom'"
                   title="Hasil Pencarian"
-                  style="padding: 0px; width: 200px"
+                  style="padding: 0px; width: 450px"
                 >
                   <div style="max-height: 300px; overflow: auto">
-                    <b-list-group style="padding: 0px">
+                    <b-list-group style="padding: 0px; width: 200px !important">
                       <b-list-group-item
-                        style="padding: 5px"
+                        style="padding: 8px"
                         v-for="(x, index) in searchRes"
                         :key="index"
                         :to="'/product/' + x.name.replace(/\s/g, '+')"
@@ -66,9 +64,38 @@
               <b-nav-item-dropdown class="mr-5" right v-else>
                 <!-- Using 'button-content' slot -->
                 <template #button-content>
-                  <em>{{ $store.state.user.name }}</em>
+                  <strong>
+                    {{ $store.state.user.category || $store.state.user.name }}
+                  </strong>
                 </template>
-                <b-dropdown-item @click="logoutUser">Sign Out</b-dropdown-item>
+                <b-dropdown-text style="width: 300px">
+                  <ul class="list-unstyled">
+                    <b-media tag="li">
+                      <template #aside>
+                        <img
+                          :src="require('@/assets/images/logo2.png')"
+                          blank
+                          blank-color="#abc"
+                          width="50"
+                          class="align-content-center"
+                          alt="placeholder"
+                        />
+                      </template>
+                      <h5 class="mt-0 mb-1">{{ $store.state.user.name }}</h5>
+                      <div class="mb-0">
+                        <div>{{ $store.state.user.email }}</div>
+                        <strong>{{ $store.state.user.category }}</strong>
+                      </div>
+                    </b-media>
+                  </ul>
+                </b-dropdown-text>
+                <b-dropdown-divider></b-dropdown-divider>
+                <b-dropdown-item
+                  class="justify-content-center my-auto"
+                  @click="logoutUser"
+                >
+                  Sign Out
+                </b-dropdown-item>
               </b-nav-item-dropdown>
             </b-navbar-nav>
           </b-collapse>
@@ -76,64 +103,191 @@
       </div>
     </scroll-fixed-header>
     <!-- modal -->
-    <b-modal id="modal-login" title="BootstrapVue" hide-footer>
+    <b-modal id="modal-login" v-model="modalLog" title="Login" hide-footer>
       <div class="child">
-        <h5 style="color: #f9b410">Login</h5>
-        <p>Selamat datang kembali</p>
-        <p style="font-size: 12px" class="mx-5">
-          Masukkan nomor telepon Anda dan kami akan mengirimkan kode verifikasi
-          Anda
-        </p>
-        <div
-          class="md-form"
-          style="
-            border-bottom: 1px solid white;
-            margin-left: 120px;
-            margin-right: 120px;
-          "
-        >
-          <i>+62</i>
-          <input
-            type="number"
-            oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
-            maxlength="12"
-            v-model="forms.phone"
-            placeholder="Nomor telepon"
-            style="
-              outline: 0;
-              border-width: 0px;
-              color: white;
-              background: #232323;
-            "
-          />
-        </div>
+        <b-tabs v-model="tab" content-class="mt-3" fill align="center">
+          <b-tab active>
+            <template #title>
+              <h5 style="color: #f9b410">Login</h5>
+            </template>
+            <p>Selamat datang kembali</p>
+            <p style="font-size: 12px" class="mx-5">
+              Masukkan nomor telepon Anda dan kami akan mengirimkan kode
+              verifikasi Anda
+            </p>
+            <div
+              class="md-form"
+              style="
+                border-bottom: 1px solid white;
+                margin-left: 120px;
+                margin-right: 120px;
+              "
+            >
+              <!-- <i>+62</i> -->
+              <input
+                v-model="forms.email"
+                type="email"
+                placeholder="Email"
+                style="
+                  outline: 0;
+                  border-width: 0px;
+                  color: white;
+                  background: #232323;
+                  margin-left: 1px;
+                "
+              />
+            </div>
+            <!--  -->
+            <div
+              class="md-form mt-3"
+              style="
+                border-bottom: 1px solid white;
+                margin-left: 120px;
+                margin-right: 120px;
+              "
+            >
+              <!-- <i>+62</i> -->
+              <input
+                type="password"
+                v-model="forms.password"
+                placeholder="Password"
+                style="
+                  outline: 0;
+                  border-width: 0px;
+                  color: white;
+                  background: #232323;
+                  margin-left: 1px;
+                "
+              />
+            </div>
+          </b-tab>
+          <b-tab>
+            <template #title>
+              <h5 style="color: #f9b410">Register</h5>
+            </template>
+            <div>
+              <div
+                class="md-form"
+                style="
+                  border-bottom: 1px solid white;
+                  margin-left: 20px;
+                  margin-right: 20px;
+                "
+              >
+                <p>Selamat datang</p>
+                <p style="font-size: 12px" class="mx-5">
+                  Silahkan lengkapi data berikut untuk mendapatkan kode
+                  verifikasi
+                </p>
+                <div>
+                  <b-form-group
+                    label="Nama:"
+                    label-for="nested-street"
+                    label-cols-sm="3"
+                    label-align-sm="right"
+                  >
+                    <b-form-input
+                      v-model="forms.name"
+                      class="w-100"
+                      id="nested-street"
+                    ></b-form-input>
+                  </b-form-group>
+
+                  <b-form-group
+                    label="Email:"
+                    label-for="nested-city"
+                    label-cols-sm="3"
+                    label-align-sm="right"
+                  >
+                    <b-form-input
+                      v-model="forms.email"
+                      type="email"
+                      id="nested-city"
+                    ></b-form-input>
+                  </b-form-group>
+
+                  <b-form-group
+                    label="Phone:"
+                    label-for="nested-state"
+                    label-cols-sm="3"
+                    label-align-sm="right"
+                  >
+                    <b-form-input
+                      v-model="forms.phone"
+                      type="number"
+                      id="nested-state"
+                    ></b-form-input>
+                  </b-form-group>
+
+                  <b-form-group
+                    label="Alamat:"
+                    label-for="nested-country"
+                    label-cols-sm="3"
+                    label-align-sm="right"
+                  >
+                    <b-form-input
+                      v-model="forms.address"
+                      id="nested-country"
+                    ></b-form-input>
+                  </b-form-group>
+                  <b-form-group
+                    label="password:"
+                    label-for="nested-country"
+                    label-cols-sm="3"
+                    label-align-sm="right"
+                  >
+                    <b-form-input
+                      type="password"
+                      v-model="forms.password"
+                      id="nested-country"
+                    ></b-form-input>
+                  </b-form-group>
+                </div>
+              </div>
+            </div>
+          </b-tab>
+        </b-tabs>
         <b-button
           variant="light"
           @click="hideModal"
-          v-b-modal.modal-verification
           style="width: 50%"
           class="mt-4 mb-2"
         >
-          Kirim
+          {{ tab == 0 ? "Kirim" : "Daftar" }}
         </b-button>
       </div>
     </b-modal>
-    <b-modal id="modal-verification" title="BootstrapVue" hide-footer>
+    <b-modal
+      v-model="modalVer"
+      id="modal-verification"
+      title="Verifikasi"
+      hide-footer
+    >
       <div class="child">
         <h5 style="color: #f9b410">Verification</h5>
         <p>Selamat datang kembali</p>
         <p style="font-size: 12px" class="mx-5">
           Enter your verification code below that we send to you. we send to
-          your SMS
+          your Email
+          {{ inOtp }}
         </p>
         <div>
-          <input type="text" maxlength="1" class="verif mx-2" />
-          <input type="text" maxlength="1" class="verif mx-2" />
-          <input type="text" maxlength="1" class="verif mx-2" />
-          <input type="text" maxlength="1" class="verif mx-2" />
-          <input type="text" maxlength="1" class="verif mx-2" />
+          <input
+            type="text"
+            maxlength="1"
+            class="verif mx-2"
+            v-for="x in 6"
+            :key="x"
+            v-model="otp[`f${x}`]"
+            :placeholder="x"
+          />
         </div>
-        <b-button variant="light" style="width: 50%" class="mt-4 mb-2">
+        <b-button
+          @click="verification"
+          variant="light"
+          style="width: 50%"
+          class="mt-4 mb-2"
+        >
           Login
         </b-button>
       </div>
@@ -152,24 +306,10 @@
           di ATM atau di aplikasi Mobile Banking
         </p>
         <div>
-          <!-- <b-form-select
-            style="width: 30%"
-            v-model="selected"
-            :options="options"
-          ></b-form-select> -->
           <b-form-select
             style="width: 80%"
             v-model="selected.payment"
-            :options="
-              $store.state.payments
-                .filter((x) => x.channel_category === paymentMode)
-                .map(function (v) {
-                  return {
-                    value: JSON.stringify(v),
-                    text: v.name,
-                  };
-                })
-            "
+            :options="optPayments"
           ></b-form-select>
           <div class="mt-3" style="text-align-last: left">
             <tr>
@@ -178,15 +318,16 @@
             </tr>
             <tr>
               <td>Jumlah</td>
-              <td>: {{ $store.state.forms.pulsa_price }}</td>
+              <td>: {{ formatPrice($store.state.forms.pulsa_price) }}</td>
             </tr>
             <tr>
               <td>Kode Bank</td>
               <td>: {{ payment.name }}</td>
             </tr>
           </div>
+
           <b-button
-            v-b-modal.modal-detail
+            @click="nextStep"
             variant="light"
             style="width: 50%"
             class="child mt-4 mb-2"
@@ -204,6 +345,7 @@
       v-model="modalDetail"
       title="BootstrapVue"
       hide-footer
+      @close="$emit('cancel', false)"
     >
       <div class="">
         <h5 style="color: #f9b410" class="child">Detail Pesanan</h5>
@@ -222,7 +364,7 @@
             </tr>
             <tr>
               <td>Harga</td>
-              <td>: {{ $store.state.forms.pulsa_price }}</td>
+              <td>: {{ formatPrice($store.state.forms.pulsa_price) }}</td>
             </tr>
             <tr>
               <td>Bayar dengan</td>
@@ -267,6 +409,8 @@ export default {
   props: {
     paymentMode: String,
     onUpdate: Function,
+    confirm: Boolean,
+    onTopup: Function,
   },
   data() {
     return {
@@ -278,6 +422,7 @@ export default {
       modalDetail: false,
       search: "",
       selected: {},
+      tab: 0,
       forms: {},
       otp: {},
       options: [
@@ -303,6 +448,16 @@ export default {
           -1
       );
     },
+    optPayments() {
+      return this.$store.state.payments
+        .filter((x) => x.channel_category === this.paymentMode)
+        .map(function (v) {
+          return {
+            value: JSON.stringify(v),
+            text: v.name,
+          };
+        });
+    },
     payment() {
       if (this.selected.payment) return JSON.parse(this.selected.payment);
       return {};
@@ -322,6 +477,9 @@ export default {
         key: "payment",
       });
     },
+    confirm(val) {
+      this.modalDetail = val;
+    },
   },
   methods: {
     ...mapActions(["logout"]),
@@ -335,31 +493,50 @@ export default {
       this.modalDetail = false;
       this.$store.commit("modalBank", false);
       this.$emit("close", true);
+      console.log(this.$store.state.forms);
+      // if (this.onTopup) {
+      //   this.onTopup(true);
+      // }
+    },
+    verification() {
+      if (this.inOtp.match(/[undefined]/g)) {
+        alert("Mohon isi data otp");
+        return false;
+      }
+      this.forms.otp = this.inOtp;
+      auth.verification(this.forms, this.$store, this.$router).then(() => {
+        this.modalVer = false;
+      });
     },
     hideModal() {
-      auth
-        .register(this.forms)
-        .then((res) => {
-          this.$bvToast.toast(res.data.message, {
-            title: `Login Berhasil`,
-            variant: "success",
-            solid: true,
-            autoHideDelay: 5000,
-            appendToast: true,
+      if (this.tab == 0) {
+        auth
+          .login(this.forms, this.$store, this.$router)
+          .catch((err) => console.log(err));
+      } else {
+        auth
+          .register(this.forms)
+          .then((res) => {
+            this.$bvToast.toast(res.data.message, {
+              title: `Login Berhasil`,
+              variant: "success",
+              solid: true,
+              autoHideDelay: 5000,
+              appendToast: true,
+            });
+            this.modalLog = false;
+            this.modalVer = true;
+          })
+          .catch((error) => {
+            this.$bvToast.toast(error, {
+              title: `Maaf, lagi ada gangguan`,
+              variant: "danger",
+              solid: true,
+              autoHideDelay: 2000,
+              appendToast: true,
+            });
           });
-          this.modalLog = false;
-          this.modalVer = true;
-          this.$store.commit("user", this.forms);
-        })
-        .catch((error) => {
-          this.$bvToast.toast(error, {
-            title: `Maaf, lagi ada gangguan`,
-            variant: "danger",
-            solid: true,
-            autoHideDelay: 2000,
-            appendToast: true,
-          });
-        });
+      }
     },
   },
 };
@@ -389,7 +566,9 @@ td {
 .bg-dark {
   background-color: #1c1c1e !important;
 }
-
+.tab-actived {
+  color: #f9b410 !important;
+}
 .login {
   text-transform: uppercase;
   font-size: 13px;
@@ -422,6 +601,13 @@ td {
   box-shadow: none;
 
   /* the rest of your styling */
+}
+.input-style {
+  outline: 0;
+  border-width: 0px;
+  color: white;
+  background: #232323;
+  margin-left: 1px;
 }
 .btn {
   margin-right: 10px;

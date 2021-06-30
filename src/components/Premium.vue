@@ -8,12 +8,15 @@
       <div class="container">
         <div class="row">
           <div class="col-md-6 hidden-xs hidden-sm">
-              <app-slider></app-slider>
+            <app-slider></app-slider>
           </div>
-              
+
           <div class="col-offset-1 col-md-6 col-sm-12 ng-scope heading-content">
-             
-            <el-image class="banner-top" style="width:200px" :src="require('@/assets/images/logo2.png')"></el-image>
+            <el-image
+              class="banner-top"
+              style="width: 200px"
+              :src="require('@/assets/images/logo2.png')"
+            ></el-image>
           </div>
           <!-- <div
             style="
@@ -32,29 +35,45 @@
     <section>
       <div class="container">
         <div class="row">
-          <div class="col-md-6 col-sm-12">
+          <div class="col-6">
             <div class="">
               <div class="buletan"></div>
               <div style="margin-top: 40px">
                 <h3>Tentang Kami</h3>
                 <p class="field-instruction-text mt-4">
-                  YELLOWINS memudahkan topup games yang kamu inginkan setiap saat, dan  dimana saja.
-
-
-                  <br /><br />
-                 Ada berbagai macam top up games. Jadi meski kamu sedang bersantai, berolahraga, atau bermain bersama teman, kamu tetap bisa melakukan top up di YELLOWINS
+                  YELLOWINS memudahkan topup games yang kamu inginkan setiap
+                  saat, dan dimana saja.
 
                   <br /><br />
-                  Kamu juga bisa menjadi bagian dari komunitas kami dengan menggunakan fitur YELLOWINS PREMIUM, dan dapatkan penawaran menarik setiap menitnya dari YELLOWINSSTORE.
-                  <br /><br />
-                Nikmati kemudahan bertransaksi dan jadilah pemenang bersama YELLOWINS. 
+                  Ada berbagai macam top up games. Jadi meski kamu sedang
+                  bersantai, berolahraga, atau bermain bersama teman, kamu tetap
+                  bisa melakukan top up di YELLOWINS
 
+                  <br /><br />
+                  Kamu juga bisa menjadi bagian dari komunitas kami dengan
+                  menggunakan fitur YELLOWINS PREMIUM, dan dapatkan penawaran
+                  menarik setiap menitnya dari YELLOWINSSTORE.
+                  <br /><br />
+                  Nikmati kemudahan bertransaksi dan jadilah pemenang bersama
+                  YELLOWINS.
                 </p>
               </div>
             </div>
+            <iframe
+              v-if="iframe"
+              :src="iframe"
+              frameborder="0"
+              style="margin-top: 50px"
+              height="600px"
+              width="100%"
+            ></iframe>
           </div>
-          <div class="col-md-6 col-sm-12 ng-scope heading-content">
-            <div class="section" style="padding: 30px"  v-if="!$store.state.user.name">
+          <div class="col-6 ng-scope heading-content">
+            <div
+              class="section"
+              style="padding: 30px"
+              v-if="!$store.state.user.name"
+            >
               <h2 class="mb-4">Masukan No HP</h2>
               <div>
                 <input
@@ -69,7 +88,7 @@
                 daftar jika anda belum memiliknya.
               </p>
             </div>
-           
+
             <div class="section" style="padding: 30px">
               <h2 class="mb-4">Provinsi</h2>
               <div>
@@ -77,26 +96,26 @@
                   class="form-input"
                   type="text"
                   placeholder="Silahkan masukan provinsi anda"
-                  v-model="selected.region"
+                  v-model="form.region"
                 />
               </div>
             </div>
             <div>
-              <h4> Pilih Paket</h4>
+              <h4>Pilih Paket</h4>
               <div class="row">
-                <div class="col ">
-                  <button type="button" style="margin:10px" class="btn btn-white active">Bronze</button>
+                <div class="col p-2" v-for="x in paket" :key="x.paket">
+                  <button
+                    @click="selected = x"
+                    type="button"
+                    class="btn btn-white"
+                    :class="{ active: x.pulsa_op == selected.pulsa_op }"
+                  >
+                    {{ x.pulsa_op }}
+                  </button>
                 </div>
-                <div class="col">
-                  <button type="button" style="margin:10px" class="btn btn-white">Silver</button>
-                </div>
-                <div class="col ">
-                  <button type="button" style="margin:10px" class="btn btn-white">Gold</button>
-                </div>
-                
               </div>
             </div>
-             <div v-if="showPayment" class="section" style="padding: 30px">
+            <div v-if="showPayment" class="section" style="padding: 30px">
               <h6 class="mb-4">Pilih Metode Pembayaran</h6>
               <div
                 v-for="x in payments"
@@ -104,7 +123,7 @@
                 class="card p-2"
                 :class="{
                   disable: x.disabled,
-                  active: selected.payment == x.code,
+                  active: selp == x.code,
                 }"
                 @click="selPay(x)"
               >
@@ -116,7 +135,9 @@
                     />
                   </div>
                   <div class="col-xs-offset-1 col-sm-5">
-                    <div class="payment-price">RP.10.000</div>
+                    <div class="payment-price">
+                      {{ formatPrice(selected.pulsa_price || 0) }}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -155,32 +176,62 @@ import transactions from "@/controller/transactions.js";
 export default {
   components: {
     appHeader: Header,
-        appSlider: Slider,
+    appSlider: Slider,
     appFooter: Footer,
   },
   data() {
     return {
       payments: [
-        { img: "gopay", code: "BCA", disabled: false },
-        { img: "ovo", code: "BRI", disabled: false },
-        { img: "dana", code: "MANDIRI", disabled: true },
+        { img: "gopay", code: "GOPAY", disabled: true },
+        { img: "ovo", code: "OVO", disabled: false },
+        { img: "dana", code: "DANA", disabled: false },
         { img: "visa", code: "CREDIT_CARD", disabled: false },
         { img: "bca", code: "VIRTUAL_ACCOUNT", disabled: false },
       ],
       paymentBank: "VIRTUAL_ACCOUNT",
       form: {},
+      iframe: false,
+      paket: [
+        {
+          paket: "Bronze",
+          pulsa_price: 10000,
+          pulsa_op: "Bronze",
+          pulsa_code: "bronze",
+          available: 5,
+        },
+        {
+          paket: "Silver",
+          pulsa_price: 29000,
+          pulsa_op: "Silver",
+          pulsa_code: "silver",
+          available: 20,
+        },
+        {
+          paket: "Premium",
+          pulsa_price: 35000,
+          pulsa_op: "Premium",
+          pulsa_code: "premium",
+          available: 28,
+        },
+      ],
       selected: {
-        pulsa_code: "redeem",
+        pulsa_code: "Bronze",
         pulsa_price: 10000,
-        pulsa_op: "Premium Member",
+        pulsa_op: "Bronze",
+        available: 5,
       },
       showPayment: true,
+      selp: "",
     };
   },
   mounted() {
     transactions.payments().then((res) => {
       this.$store.commit("payments", res.data);
+      this.form.region = this.$store.state.user.address;
     });
+    if (!this.$store.state.user.id) {
+      this.$bvModal.show("modal-login");
+    }
     this.form = Object.assign({}, this.$store.state.user);
   },
   methods: {
@@ -189,39 +240,66 @@ export default {
         this.$store.commit("forms", this.selected);
         this.$store.commit("modalBank", true);
         this.paymentBank = x.code;
-        console.log(this.$store.modalBank);
+        this.selp = x.code;
+
+        return false;
+      }
+      const cek = this.payments.filter((y) => y.code == x.code)[0];
+      if (cek && cek.disabled) {
+        this.$bvToast.toast(`Pembayaran dengan ${x.code} belum didukung`, {
+          title: `Pembayaran tidak valid`,
+          variant: "error",
+          solid: true,
+          autoHideDelay: 2000,
+          appendToast: true,
+        });
         return false;
       }
       this.selected.payment = x.code;
       this.showPayment = false;
+      this.selp = x.code;
       this.$nextTick().then(() => {
         this.showPayment = true;
       });
     },
     save() {
       const forms = {
-        region: this.selected.region,
+        pulsa_code: this.selected.pulsa_code,
+        region: this.form.region,
         payment: this.$store.state.forms.payment,
+        paket: this.selected.pulsa_op,
+        price: this.selected.pulsa_price,
+        available: this.selected.available,
       };
-      transactions.redeem(forms).then((e) => {
-        this.$bvToast
-          .toast(e.data.message, {
+      transactions
+        .redeem(forms, this.$store)
+        .then((e) => {
+          this.$bvToast.toast(e.data.message, {
             title: `Transaksi berhasil Berhasil`,
             variant: "success",
             solid: true,
             autoHideDelay: 5000,
             appendToast: true,
-          })
-          .catch((error) => {
-            this.$bvToast.toast(error, {
-              title: `Maaf, ada sedikit maintenance`,
-              variant: "danger",
-              solid: true,
-              autoHideDelay: 5000,
-              appendToast: true,
-            });
           });
-      });
+          if (e.data.src) {
+            let data = Object.assign({}, this.selected);
+            data.payment = this.$store.state.forms.payment;
+            data.status = "Pending";
+            data.preview = e.data;
+            this.$store.commit("forms", data);
+            this.$router.push(`/payment/${data.pulsa_op}`);
+          }
+          // this.iframe = e.data.src;
+        })
+        .catch((error) => {
+          this.$bvToast.toast(error, {
+            title: `Maaf, ada sedikit maintenance`,
+            variant: "danger",
+            solid: true,
+            autoHideDelay: 5000,
+            appendToast: true,
+          });
+        });
     },
   },
 };
@@ -261,8 +339,8 @@ export default {
   cursor: not-allowed !important;
 }
 .card.active {
-  background-color: rgb(144, 238, 144);
-  border-color: rgb(77, 182, 77);
+  background-color: #ffb300;
+  border-color: #ffb300;
 }
 .page-heading {
   background-image: url(../assets/images/bg.png);
@@ -309,15 +387,15 @@ export default {
   margin-top: 40px;
 }
 .btn-light {
-  background-color:#F9B410  !important;
+  background-color: #f9b410 !important;
   border-color: #ffb300 !important;
 }
 .btn-white {
-  background-color:#fff  !important;
+  background-color: #fff !important;
   border-color: #fff !important;
 }
 .btn-white.active {
-  background-color:#F9B410  !important;
+  background-color: #f9b410 !important;
   border-color: #ffb300 !important;
 }
 .mt-3,
@@ -343,8 +421,7 @@ h6,
   margin-bottom: 0.5rem;
   font-weight: bold;
   line-height: 1.3;
-  color: #F9B410
-;
+  color: #f9b410;
 }
 @media (max-width: 576px) {
   .input-group {

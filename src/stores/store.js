@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-
+import axios from 'axios'
 // import cart from './modules/cart';
 // import products from './modules/products';
 // import auth from './modules/auth';
@@ -64,6 +64,15 @@ export default new Vuex.Store({
             var forms = state.forms
             forms[data.key] = data.value
             commit('forms', forms)
+        },
+        async logout({ commit }) {
+            const res = axios.get('/auth/logout')
+            commit('authentication', {})
+            commit('token', null)
+            commit('user', { role: 'public', id: 0 })
+            commit('code', 200)
+            console.log(res)
+            location.reload()
         },
     },
     // actions,

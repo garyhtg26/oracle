@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <div class="detail">
+      <!-- <v-expand-transition> -->
       <router-view></router-view>
+      <!-- </v-expand-transition> -->
       <message-component></message-component>
     </div>
   </div>
