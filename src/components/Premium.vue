@@ -35,7 +35,7 @@
     <section>
       <div class="container">
         <div class="row">
-          <div class="col-6">
+          <div class="col-12 col-md-6 ">
             <div class="">
               <div class="buletan"></div>
               <div style="margin-top: 40px">
@@ -68,7 +68,7 @@
               width="100%"
             ></iframe>
           </div>
-          <div class="col-6 ng-scope heading-content">
+          <div class="col-12 col-md-6  ng-scope heading-content">
             <div
               class="section"
               style="padding: 30px"
