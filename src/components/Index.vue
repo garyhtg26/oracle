@@ -14,12 +14,12 @@
                   :href="x.description"
                   target="_blank"
                   class="berita"
-                  style="text-decoration: none"
+                  style="text-decoration: none;"
                 >
                   <img
                     class="berita-img"
                     :src="x.photo"
-                    style="max-width: 100%"
+                    style="max-width: 100%;"
                   />
                   <div class="berita-title my-2">
                     {{ x.title }}
@@ -33,11 +33,11 @@
       </div>
 
       <message-component></message-component>
-      <div class="container product" style="background-color: #232323"></div>
-      <div class="container" style="background-color: #232323; margin-bottom:50px;">
+      <div class="container product" style="background-color: #232323;"></div>
+      <div class="container" style="background-color: #232323; margin-bottom:20px;">
         <div class="row">
           <div class="col-md-12">
-            <h6 class="mx-4 mt-4" style="color: white">Mobile</h6>
+            <h6 class="mx-4 mt-4" style="color: white;">Mobile</h6>
             <app-store
               :category="pc"
               :products="products"
@@ -46,7 +46,7 @@
             <!-- <div style="margin-top: -2px; width: 100%;">
               <el-image class="banner-top" :src="banner"></el-image>
             </div> -->
-            <h6 class="mx-4 mt-4" style="color: white">PC Games</h6>
+            <h6 class="mx-4 mt-4" style="color: white;">PC Games</h6>
             <app-store
               :category="pc"
               :products="products"
@@ -67,14 +67,15 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
-import Header from "./templates/Header.vue";
-import Slider from "./Slider.vue";
-import Store from "./Store.vue";
-import Footer from "./templates/Footer.vue";
-import MessageComponent from "./common/MessageComponent.vue";
-import pages from "@/controller/pages.js";
-import voucher from "@/controller/voucher.js";
+import { mapActions } from 'vuex'
+import Header from './templates/Header.vue'
+import Slider from './Slider.vue'
+import Store from './Store.vue'
+import Footer from './templates/Footer.vue'
+import MessageComponent from './common/MessageComponent.vue'
+import pages from '@/controller/pages.js'
+import voucher from '@/controller/voucher.js'
+import auth from '@/controller/auth.js'
 
 export default {
   components: {
@@ -87,57 +88,65 @@ export default {
   data() {
     return {
       news: [],
-      src: require("@/assets/images/4.png"),
+      src: require('@/assets/images/4.png'),
       others: [
-        "Gemscool",
-        "Google Play US REGION",
-        "Google Play Indonesia",
-        "iTunes US REGION",
-        "iTunes Gift Card Indonesia",
-        "Lyto",
-        "Megaxus",
-        "Digicash",
-        "Razer PIN",
-        "Playstation",
-        "Steam Sea",
-        "Wifi ID",
-        "UniPin",
-        "Skyegrid",
-        "Garena",
+        'Gemscool',
+        'Google Play US REGION',
+        'Google Play Indonesia',
+        'iTunes US REGION',
+        'iTunes Gift Card Indonesia',
+        'Lyto',
+        'Megaxus',
+        'Digicash',
+        'Razer PIN',
+        'Playstation',
+        'Steam Sea',
+        'Wifi ID',
+        'UniPin',
+        'Skyegrid',
+        'Garena',
       ],
       mobile: [
-        "Arena of Valor",
-        "Bleach Mobile 3D",
-        "Call of Duty Mobile",
-        "Dragon Nest M - SEA",
-        "Era of Celestials",
-        "Free Fire",
-        "PUBG Mobile",
-        "Speed Drifters",
-        "Ragnarok M",
+        'Arena of Valor',
+        'Bleach Mobile 3D',
+        'Call of Duty Mobile',
+        'Dragon Nest M - SEA',
+        'Era of Celestials',
+        'Free Fire',
+        'PUBG Mobile',
+        'Speed Drifters',
+        'Ragnarok M',
       ],
-      pc: ["Voucher PB Zepetto", "Valorant"],
-      berita: require("@/assets/images/berita1.jpeg"),
-      banner: require("@/assets/images/banner.png"),
-      products: [],
-    };
+      pc: ['Voucher PB Zepetto', 'Valorant'],
+      berita: require('@/assets/images/berita1.jpeg'),
+      banner: require('@/assets/images/banner.png'),
+      // products: [],
+    }
+  },
+  computed: {
+    products() {
+      return this.$store.state.products; 
+    }
   },
   methods: {
-    ...mapActions(["getShoppingCart", "listenToProductList"]),
+    ...mapActions(['getShoppingCart', 'listenToProductList']),
     getItem() {
-      this.isProductLoading = true;
+      this.isProductLoading = true
       voucher.list(this.$store).then((res) => {
-        this.products = res;
-        this.$store.commit("products", res);
-        this.isProductLoading = false;
-      });
+        // this.products = res
+        this.$store.commit('products', res)
+        this.isProductLoading = false
+      })
+      if (this.$store.state.authentication) {
+        auth.prepare(this.$store, true)
+      }
     },
   },
   created() {
-    pages.index(0).then((e) => (this.news = e));
-    this.getItem();
+    pages.index(0).then((e) => (this.news = e))
+    this.getItem()
   },
-};
+}
 </script>
 
 <style>

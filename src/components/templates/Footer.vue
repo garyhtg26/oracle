@@ -9,6 +9,16 @@
       />
       <div class="row">
         <div class="col-sm-4">
+          <h4 class="title">TENTANG KAMI</h4>
+          <p>
+            Yellowins memudahkan topup games yang kamu inginkan setiap saat, dan  dimana saja.
+            <br><br>
+            Kamu juga bisa menjadi bagian dari komunitas kami dengan menggunakan fitur Yellowins Premium, dan dapatkan penawaran menarik setiap menitnya dari Yellowins.
+
+          </p>
+     
+        </div>
+        <div class="col-sm-4">
           <h4 class="title">ADDRESS</h4>
           <p>
             <i class="fa fa-map-marker mr-1"></i> Gg. Mpu Suro No.825, Pandeyan,
@@ -40,7 +50,7 @@
           </ul>
         </div>
 
-        <div class="col-sm-4">
+        <!-- <div class="col-sm-4">
           <h4 class="title">Download App</h4>
 
           <div style="display: flex; justify-content: center; margin: 16px 0px">
@@ -52,7 +62,7 @@
             >
             <a class="unf-footer-ios" aria-label="ios">&nbsp;</a>
           </div>
-        </div>
+        </div> -->
       </div>
       <hr />
       <div class="row text-center" style="justify-content: center">

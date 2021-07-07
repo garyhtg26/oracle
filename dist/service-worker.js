@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/precache-manifest.cbbb074587352b5833ee7915838f121f.js"
+  "/precache-manifest.2097813d238323d3d889b63faeeb6f8a.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "yellowins"});

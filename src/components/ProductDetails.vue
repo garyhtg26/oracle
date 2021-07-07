@@ -34,11 +34,17 @@
     </div>
     <section>
       <div class="container">
-        <div class="row">
+        <div class="row mt-5">
           <div class="col-md-6 col-sm-12">
-            <div class="yellowins"></div>
-            <div style="margin-top: 40px">
-              <h3>Tentang Kami</h3>
+            <b-row>
+              <b-col cols="4" md="12">
+                <div class="yellowins"></div>
+              </b-col>
+              <b-col cols="8" align-self="center" md="12" class="mt-2">
+                <h3>Tentang Kami</h3>
+              </b-col>
+            </b-row>
+            <div>
               <p class="field-instruction-text mt-4">
                 YELLOWINS memudahkan topup games yang kamu inginkan setiap saat,
                 dan dimana saja.
@@ -59,13 +65,13 @@
             </div>
           </div>
           <div class="col-12 col-md-6 ng-scope heading-content">
-             <div class="section" style="padding: 30px">
+            <div class="section" style="padding: 30px" v-if="!hasServer">
               <h2 class="mb-4">Masukan Game ID</h2>
               <div>
                 <input
                   class="form-input"
                   type="text"
-                  v-model="selected.hp"
+                  v-model="forms.game_id"
                   placeholder="Silahkan masukan ID anda"
                 />
               </div>
@@ -73,46 +79,80 @@
                 Untuk menemukan ID Anda, klik pada ikon karakter. User ID
                 tercantum di bawah nama karakter Anda. Contoh: '1234567890'.
               </p>
+              
             </div>
-            <div class="row">
+            <div class="row" v-else>
               <div class="col">
-                   <div class="section" style="padding: 30px">
-              <h6 class="mb-4">Masukan Game ID</h6>
-              <div>
-                <input
-                  class="form-input"
-                  type="text"
-                  v-model="selected.hp"
-                  placeholder="ID anda"
-                />
-              </div>
-          
-            </div>
+                <div class="section" style="padding: 30px">
+                  <h6 class="mb-4">Masukan Game ID</h6>
+                  <div>
+                    <input
+                      class="form-input"
+                      type="text"
+                      v-model="forms.game_id"
+                      placeholder="ID anda"
+                    />
+                  </div>
+                </div>
               </div>
               <div class="col">
-                   <div class="section" style="padding: 30px">
-              <h6 class="mb-4">Masukan Server ID</h6>
-              <div>
-                <input
-                  class="form-input"
-                  type="text"
-                  v-model="selected.hp"
-                  placeholder="Server ID anda"
-                />
+                <div class="section" style="padding: 30px">
+                  <h6 class="mb-4">Masukan Server ID</h6>
+                  <div>
+                    <input
+                      class="form-input"
+                      type="text"
+                      v-model="forms.server_id"
+                      placeholder="Server ID anda"
+                    />
+                  </div>
+                </div>
               </div>
-           
             </div>
-              </div>
-            </div>
-           
+            <!-- <div v-else style="padding: 0px">
+              <b-row>
+                <b-col cols="12" md="6">
+                  <div class="section">
+                    <h5 class="mb-4">Masukkan Game ID</h5>
+                    <div>
+                      <input
+                        class="form-input"
+                        type="text"
+                        v-model="forms.game_id"
+                        placeholder="Game ID anda"
+                      />
+                    </div>
+                    <p class="field-instruction-text mt-2"></p>
+                  </div>
+                </b-col>
+
+                <b-col cols="12" md="6">
+                  <div class="section">
+                    <h5 class="mb-4">Masukkan Server ID</h5>
+                    <div>
+                      <input
+                        class="form-input"
+                        type="text"
+                        v-model="forms.server_id"
+                        placeholder="server ID anda"
+                      />
+                    </div>
+                    <p class="field-instruction-text mt-2"></p>
+                  </div>
+                </b-col>
+              </b-row>
+            </div> -->
             <div class="section" style="padding: 30px">
               <h2 class="mb-4">Pilih Nominal Top Up</h2>
+              <!-- <div class="col-12 pb-2">
+                <b-input placeholder="Search.."></b-input>
+              </div> -->
               <div class="row">
                 <div
                   v-for="x in products"
                   :key="x.pulsa_code"
                   class="col-md-4 col-6"
-                  @click="x.status !== 'empty' ? (selected = x) : false"
+                  @click="selected = x"
                 >
                   <div
                     class="card"
@@ -174,6 +214,7 @@ import Footer from "./templates/Footer";
 import voucher from "@/controller/voucher.js";
 import Slider from "./Slider.vue";
 import transactions from "@/controller/transactions.js";
+import collect from "collect.js";
 export default {
   components: {
     appHeader: Header,
@@ -182,35 +223,46 @@ export default {
   },
   data() {
     return {
+      collect,
       loaderColor: "#5cb85c",
       loaderSize: "50px",
       products: [],
       selected: {
         pulsa_price: 0,
       },
+      forms: {},
       paymentBank: "VIRTUAL_ACCOUNT",
       showPayment: true,
       confirmation: false,
       selp: "",
-      payments: [
-        { img: "alfamart", code: "ALFAMART", disabled: true },
-        { img: "ovo", code: "OVO", disabled: false },
-        { img: "dana", code: "DANA", disabled: false },
-        { img: "shopeepay", code: "SHOPEEPAY", disabled: false },
-        { img: "atm", code: "VIRTUAL_ACCOUNT", disabled: false },
-      ],
     };
   },
   watch: {
     "$route.params.id"() {
       this.getItem();
     },
+    "$store.state.items"() {
+      this.selected = {
+        pulsa_price: 0,
+      };
+      this.$nextTick().then(() => {
+        this.getItem();
+      })
+    },
   },
   computed: {
     icon_url() {
-      return this.products.length > 0
-        ? this.products[0].icon_url
-        : "https://projects.papermindvention.com/oracle/backend/public/images/Bleach Mobile 3D.png";
+      return (
+        collect(this.products).pluck("icon_url").first() ||
+        "https://projects.papermindvention.com/oracle/backend/public/images/Bleach Mobile 3D.png"
+      );
+    },
+    hasServer() {
+      const ids = ["Mobile+Legends", "Ragnarok+M+Eternal+Love"];
+      return ids.indexOf(this.$route.params.id) > -1;
+    },
+    payments() {
+      return transactions.optPayments(this.$store, this.selected);
     },
   },
   methods: {
@@ -225,6 +277,16 @@ export default {
 
     selPay(x) {
       if (["VIRTUAL_ACCOUNT", "CREDIT_CARD"].indexOf(x.code) > -1) {
+        if (x.disabled) {
+          this.$bvToast.toast(`Pembayaran dengan ${x.code} belum didukung`, {
+            title: `Pembayaran tidak valid`,
+            variant: "error",
+            solid: true,
+            autoHideDelay: 2000,
+            appendToast: true,
+          });
+          return false;
+        }
         this.$store.commit("forms", this.selected);
         this.$store.commit("modalBank", true);
         this.paymentBank = x.code;
@@ -252,14 +314,16 @@ export default {
     getItem() {
       const name = this.$route.params.id.replace(/[+]/g, " ");
       voucher.show(name, this.$store).then((res) => {
-        console.log(res);
         this.products = res.data;
       });
     },
     topUp() {
       this.selected.no_hp = this.$store.state.user.phone || "0000";
       this.confirmation = false;
-      const { selected } = this;
+      let { selected } = this;
+      const { forms } = this;
+      selected.hp = forms.game_id;
+      selected.server_id = forms.server_id;
       if (!selected.payment || !selected.hp || !selected.no_hp) {
         this.$bvToast.toast("Game id tidak boleh kosong", {
           title: `Harap lengkapi data terlebih dahulu`,
@@ -270,6 +334,7 @@ export default {
         });
         return false;
       }
+      // alert(JSON.stringify(selected));
       transactions
         .store(this.selected)
         .then((e) => {
@@ -310,9 +375,6 @@ export default {
   },
   mounted() {
     this.getItem();
-    transactions.payments().then((res) => {
-      this.$store.commit("payments", res.data);
-    });
   },
 };
 </script>
@@ -328,7 +390,8 @@ export default {
 }
 .payment-img {
   float: left;
-  width: 90px;
+  /* width: 90px; */
+  height: 40px;
   padding: 8px;
   margin-top: 2px;
 }
@@ -366,7 +429,7 @@ export default {
   background-size: cover;
   background-position: top;
   border-radius: 25px;
-  margin-top: -50px
+  margin-top: -50px;
 }
 .section {
   background-color: #232323;
@@ -408,7 +471,6 @@ export default {
   background-size: cover;
 
   border-radius: 25px;
-
 }
 .mt-3,
 .my-3 {

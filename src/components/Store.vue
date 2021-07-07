@@ -10,7 +10,7 @@
         ></grid-loader>
       </div>
 
-      <b-row v-if="!isProductLoading">
+      <b-row>
         <b-col v-for="prod in lists" :key="prod.id" cols="6" sm="3" md="2">
           <app-product-item
             :item="prod"
@@ -42,13 +42,16 @@ export default {
       loaderColor: "#5cb85c",
       loaderSize: "50px",
       displayList: false,
-      isProductLoading: false,
+      // : false,
     };
   },
   // computed: {
   //   ...mapGetters([/* 'products' , */ "isProductLoading"]),
   // },
   computed: {
+    isProductLoading() {
+      return this.lists.length == 0;
+    },
     lists() {
       return this.reverse
         ? this.products.filter((x) => this.category.indexOf(x.name) == -1)

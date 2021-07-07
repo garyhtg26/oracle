@@ -12,6 +12,7 @@
     "axios": "^0.19.2",
     "bootstrap": "^4.4.1",
     "bootstrap-vue": "^2.13.1",
+    "collect.js": "^4.28.6",
     "core-js": "^3.6.5",
     "element-ui": "^2.13.1",
     "firebase": "^7.14.1",

@@ -13,7 +13,7 @@
 
           <div class="col-offset-1 col-md-6 col-sm-12 ng-scope heading-content">
             <el-image
-              class="banner-top"
+              class="banner-top mx-auto"
               style="width: 200px"
               :src="require('@/assets/images/logo2.png')"
             ></el-image>
@@ -35,7 +35,7 @@
     <section>
       <div class="container">
         <div class="row">
-          <div class="col-12 col-md-6 ">
+          <div class="col-md-6 col-12">
             <div class="">
               <div class="buletan"></div>
               <div style="margin-top: 40px">
@@ -68,7 +68,7 @@
               width="100%"
             ></iframe>
           </div>
-          <div class="col-12 col-md-6  ng-scope heading-content">
+          <div class="col-md-6 col-12 ng-scope heading-content">
             <div
               class="section"
               style="padding: 30px"
@@ -101,9 +101,11 @@
               </div>
             </div>
             <div>
-              <h4>Pilih Paket</h4>
-              <div class="row">
-                <div class="col p-2" v-for="x in paket" :key="x.paket">
+              <b-row no-gutters align-h="between" align-v="start">
+                <b-col cols="12">
+                  <h4>Pilih Paket</h4>
+                </b-col>
+                <div class="col-4 p-1" v-for="x in paket" :key="x.paket">
                   <button
                     @click="selected = x"
                     type="button"
@@ -113,7 +115,7 @@
                     {{ x.pulsa_op }}
                   </button>
                 </div>
-              </div>
+              </b-row>
             </div>
             <div v-if="showPayment" class="section" style="padding: 30px">
               <h6 class="mb-4">Pilih Metode Pembayaran</h6>
@@ -128,14 +130,14 @@
                 @click="selPay(x)"
               >
                 <div class="row">
-                  <div class="col-sm-7">
+                  <div class="col-4">
                     <img
                       :src="require(`@/assets/images/payments/${x.img}.png`)"
                       class="payment-img"
                     />
                   </div>
-                  <div class="col-xs-offset-1 col-sm-5">
-                    <div class="payment-price">
+                  <div class="col-xs-offset-1 col-8">
+                    <div class="payment-price" style="float: right">
                       {{ formatPrice(selected.pulsa_price || 0) }}
                     </div>
                   </div>
@@ -148,6 +150,7 @@
                 <input
                   class="form-input"
                   type="text"
+                  v-model="form.redeem_code"
                   placeholder="Silahkan masukan Kode anda"
                 />
               </div>
@@ -173,21 +176,20 @@ import Header from "./templates/Header";
 import Footer from "./templates/Footer";
 import Slider from "./Slider.vue";
 import transactions from "@/controller/transactions.js";
+import auth from "@/controller/auth.js";
 export default {
   components: {
     appHeader: Header,
     appSlider: Slider,
     appFooter: Footer,
   },
+  computed: {
+    payments() {
+      return transactions.optPayments(this.$store, this.selected);
+    },
+  },
   data() {
     return {
-      payments: [
-        { img: "gopay", code: "GOPAY", disabled: true },
-        { img: "ovo", code: "OVO", disabled: false },
-        { img: "dana", code: "DANA", disabled: false },
-        { img: "visa", code: "CREDIT_CARD", disabled: false },
-        { img: "bca", code: "VIRTUAL_ACCOUNT", disabled: false },
-      ],
       paymentBank: "VIRTUAL_ACCOUNT",
       form: {},
       iframe: false,
@@ -207,10 +209,10 @@ export default {
           available: 20,
         },
         {
-          paket: "Premium",
+          paket: "Gold",
           pulsa_price: 35000,
-          pulsa_op: "Premium",
-          pulsa_code: "premium",
+          pulsa_op: "Gold",
+          pulsa_code: "Gold",
           available: 28,
         },
       ],
@@ -225,25 +227,36 @@ export default {
     };
   },
   mounted() {
-    transactions.payments().then((res) => {
-      this.$store.commit("payments", res.data);
-      this.form.region = this.$store.state.user.address;
-    });
+    // transactions.payments().then((res) => {
+    //   this.$store.commit("payments", res.data);
+    // });
     if (!this.$store.state.user.id) {
       this.$bvModal.show("modal-login");
     }
+    this.form.region = this.$store.state.user.address;
     this.form = Object.assign({}, this.$store.state.user);
   },
   methods: {
     selPay(x) {
-      if (["VIRTUAL_ACCOUNT", "CREDIT_CARD"].indexOf(x.code) > -1) {
+      const cards = ["VIRTUAL_ACCOUNT", "CREDIT_CARD"];
+      if (cards.indexOf(x.code) > -1) {
+        if (x.disabled) {
+          this.$bvToast.toast(`Pembayaran dengan ${x.code} belum didukung`, {
+            title: `Pembayaran tidak valid`,
+            variant: "error",
+            solid: true,
+            autoHideDelay: 2000,
+            appendToast: true,
+          });
+          return false;
+        }
         this.$store.commit("forms", this.selected);
         this.$store.commit("modalBank", true);
         this.paymentBank = x.code;
         this.selp = x.code;
-
         return false;
       }
+
       const cek = this.payments.filter((y) => y.code == x.code)[0];
       if (cek && cek.disabled) {
         this.$bvToast.toast(`Pembayaran dengan ${x.code} belum didukung`, {
@@ -256,6 +269,7 @@ export default {
         return false;
       }
       this.selected.payment = x.code;
+      this.$store.commit("forms", this.selected);
       this.showPayment = false;
       this.selp = x.code;
       this.$nextTick().then(() => {
@@ -263,6 +277,33 @@ export default {
       });
     },
     save() {
+      if (this.form.redeem_code) {
+        transactions
+          .redeemCode(this.form, this.$store)
+          .then((e) => {
+            auth.prepare(this.$store, true);
+            this.$bvToast.toast(e.data.message, {
+              title: `Transaksi berhasil Berhasil`,
+              variant: "success",
+              solid: true,
+              autoHideDelay: 5000,
+              appendToast: true,
+            });
+          })
+          .catch(() => {
+            this.$bvToast.toast(
+              "Pastikan anda sudah login, dan kode masih aktif",
+              {
+                title: `Error :(`,
+                variant: "danger",
+                solid: true,
+                autoHideDelay: 5000,
+                appendToast: true,
+              }
+            );
+          });
+        return;
+      }
       const forms = {
         pulsa_code: this.selected.pulsa_code,
         region: this.form.region,
@@ -316,7 +357,8 @@ export default {
 }
 .payment-img {
   float: left;
-  width: 90px;
+  /* width: 90px; */
+  height: 40px;
   padding: 8px;
   margin-top: 2px;
 }
@@ -356,7 +398,6 @@ export default {
   background-size: cover;
 
   border-radius: 25px;
-
 }
 .section {
   background-color: #232323;

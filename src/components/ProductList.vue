@@ -2,7 +2,7 @@
   <div class="d-flex flex-column sticky-footer-wrapper">
     <main class="flex-fill">
       <app-header></app-header>
-      <message-component></message-component>
+      <!-- <message-component></message-component> -->
       <!-- ========================= SECTION CONTENT ========================= -->
       <section class="section-content padding-y">
         <div

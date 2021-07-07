@@ -15,7 +15,6 @@
           </b-navbar-brand>
 
           <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
-
           <b-collapse id="nav-collapse" is-nav>
             <b-navbar-nav class="ml-auto">
               <div class="search mr-4">
@@ -52,7 +51,9 @@
               </div>
 
               <b-nav-item to="/premium" class="mr-4">PREMIUM</b-nav-item>
-              <b-nav-item to="/" class="mr-4">DOWNLOAD</b-nav-item>
+              <b-nav-item to="#" class="mr-4" @click="download">
+                DOWNLOAD
+              </b-nav-item>
               <b-nav-item
                 v-if="!$store.state.user.name"
                 v-b-modal.modal-login
@@ -119,8 +120,8 @@
               class="md-form"
               style="
                 border-bottom: 1px solid white;
-                margin-left: 120px;
-                margin-right: 120px;
+                margin-left: 50px;
+                margin-right: 50px;
               "
             >
               <!-- <i>+62</i> -->
@@ -142,8 +143,8 @@
               class="md-form mt-3"
               style="
                 border-bottom: 1px solid white;
-                margin-left: 120px;
-                margin-right: 120px;
+                margin-left: 50px;
+                margin-right: 50px;
               "
             >
               <!-- <i>+62</i> -->
@@ -247,6 +248,10 @@
             </div>
           </b-tab>
         </b-tabs>
+        <p style="font-size: 12px" @click="modalVer = true" class="mx-5 mt-4">
+          Klik jika sebelumnya sudah punya kode otp
+        </p>
+        <!-- <span @click="modalVer=true"></span> -->
         <b-button
           variant="light"
           @click="hideModal"
@@ -269,10 +274,10 @@
         <p style="font-size: 12px" class="mx-5">
           Enter your verification code below that we send to you. we send to
           your Email
-          {{ inOtp }}
+          <!-- {{ inOtp }} -->
         </p>
         <div>
-          <input
+          <!-- <input
             type="text"
             maxlength="1"
             class="verif mx-2"
@@ -280,7 +285,46 @@
             :key="x"
             v-model="otp[`f${x}`]"
             :placeholder="x"
-          />
+          /> -->
+          <b-row align-v="center" align-h="center">
+            <b-col
+              cols="10"
+              style="border-bottom: 1px solid white; width: 90px"
+            >
+              <input
+                v-if="!forms.email"
+                type="number"
+                v-model="forms.email"
+                placeholder="Masukkan Email yang sudah terdaftar"
+                class="md-form mt-3"
+                style="
+                  outline: 0;
+                  border-width: 0px;
+                  color: white;
+                  background: #232323;
+                  margin-left: 1px;
+                "
+              />
+            </b-col>
+            <b-col
+              cols="10"
+              style="border-bottom: 1px solid white; width: 90px"
+            >
+              <input
+                type="number"
+                v-model="forms.otp"
+                placeholder="Masukkan Kode OTP"
+                class="md-form mt-3"
+                style="
+                  outline: 0;
+                  border-width: 0px;
+                  color: white;
+                  background: #232323;
+                  margin-left: 1px;
+                "
+              />
+            </b-col>
+          </b-row>
         </div>
         <b-button
           @click="verification"
@@ -424,7 +468,7 @@ export default {
       selected: {},
       tab: 0,
       forms: {},
-      otp: {},
+      otp: null,
       options: [
         { value: null, text: "Pilih Bank" },
         { value: "120", text: "BCA" },
@@ -450,7 +494,7 @@ export default {
     },
     optPayments() {
       return this.$store.state.payments
-        .filter((x) => x.channel_category === this.paymentMode)
+        .filter((x) => x.channel_category === this.paymentMode && x.is_enabled)
         .map(function (v) {
           return {
             value: JSON.stringify(v),
@@ -462,15 +506,18 @@ export default {
       if (this.selected.payment) return JSON.parse(this.selected.payment);
       return {};
     },
-    inOtp() {
-      const { otp } = this;
-      return `${otp.f1}${otp.f2}${otp.f3}${otp.f4}${otp.f5}${otp.f6}`;
-    },
+    // inOtp() {
+    //   const { otp } = this;
+    //   return `${otp.f1}${otp.f2}${otp.f3}${otp.f4}${otp.f5}${otp.f6}`;
+    // },
     userEmail() {
       return this.isLoggedIn ? this.currentUser.email : "";
     },
   },
   watch: {
+    "$store.state.popup"(val) {
+      this.modalLog = val;
+    },
     payment(val) {
       this.$store.dispatch("updateForms", {
         value: val.channel_code,
@@ -484,10 +531,28 @@ export default {
   methods: {
     ...mapActions(["logout"]),
     logoutUser() {
-      this.logout();
+      // this.logout();
+      auth.logout(this.$store);
     },
     toggleNavbar() {
       this.isNavOpen = !this.isNavOpen;
+    },
+    download() {
+      if (navigator.userAgent.indexOf("Chrome") == -1) {
+        document.location =
+          "googlechrome://navigate?url=https://yellowins.com/";
+      } else {
+        this.$bvToast.toast(
+          `Klik button tambahkan ke layar utama pada menu dibawah`,
+          {
+            title: `Install Apps`,
+            variant: "success",
+            solid: true,
+            autoHideDelay: 2000,
+            appendToast: true,
+          }
+        );
+      }
     },
     nextStep() {
       this.modalDetail = false;
@@ -499,20 +564,27 @@ export default {
       // }
     },
     verification() {
-      if (this.inOtp.match(/[undefined]/g)) {
+      if (!this.forms.otp) {
         alert("Mohon isi data otp");
         return false;
       }
-      this.forms.otp = this.inOtp;
-      auth.verification(this.forms, this.$store, this.$router).then(() => {
-        this.modalVer = false;
-      });
+      auth
+        .verification(this.forms, this.$store, this.$router, this.$bvToast)
+        .then(() => {
+          this.modalVer = false;
+        });
     },
     hideModal() {
       if (this.tab == 0) {
         auth
-          .login(this.forms, this.$store, this.$router)
-          .catch((err) => console.log(err));
+          .login(
+            this.forms,
+            this.$store,
+            this.$router,
+            this.$bvToast,
+            this.$bvModal
+          )
+          .catch((err) => alert(err));
       } else {
         auth
           .register(this.forms)
@@ -521,7 +593,7 @@ export default {
               title: `Login Berhasil`,
               variant: "success",
               solid: true,
-              autoHideDelay: 5000,
+              autoHideDelay: 15000,
               appendToast: true,
             });
             this.modalLog = false;

@@ -306,7 +306,7 @@ export default {
   background-size: cover;
   background-position: top;
   border-radius: 25px;
-
+  margin-top: -50px;
 }
 .section {
   background-color: #232323;
@@ -348,7 +348,7 @@ export default {
   background-size: cover;
 
   border-radius: 25px;
-
+  margin-top: -50px;
 }
 .mt-3,
 .my-3 {

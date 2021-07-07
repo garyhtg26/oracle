@@ -58,6 +58,7 @@ export default {
 
 .grow {
   transition: all 0.2s ease-in-out;
+  border-radius: 20px;
 }
 
 .grow:hover {
