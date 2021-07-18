@@ -100,7 +100,7 @@
                 />
               </div>
             </div>
-            <div>
+            <!-- <div>
               <b-row no-gutters align-h="between" align-v="start">
                 <b-col cols="12">
                   <h4>Pilih Paket</h4>
@@ -116,7 +116,7 @@
                   </button>
                 </div>
               </b-row>
-            </div>
+            </div> -->
             <div v-if="showPayment" class="section" style="padding: 30px">
               <h6 class="mb-4">Pilih Metode Pembayaran</h6>
               <div
@@ -217,10 +217,10 @@ export default {
         },
       ],
       selected: {
-        pulsa_code: "Bronze",
-        pulsa_price: 10000,
+        pulsa_code: "Premium",
+        pulsa_price: 12000,
         pulsa_op: "Bronze",
-        available: 5,
+        available: 28,
       },
       showPayment: true,
       selp: "",

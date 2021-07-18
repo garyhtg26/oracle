@@ -3,7 +3,7 @@
     <vueper-slides
       class="no-shadow"
       arrows-outside
-      bullets-outside
+      bullets-inside
       transition-speed="250"
       autoplay
       fixed-height="250px"
@@ -13,11 +13,11 @@
       @autoplay-resume="internalAutoPlaying = true"
     >
       <vueper-slide
-        v-for="(slide, i) in slides"
+        v-for="(slide) in slides"
         :key="slide.id"
         :content="slide.content"
         :image="slide.photo"
-        :style="'background-color: ' + ['#42b983', '#ff5252'][i % 2]"
+        :style="'background-color: ' + ['#F9B410']"
       />
     </vueper-slides>
     <!-- <vueper-slides
@@ -63,15 +63,15 @@ export default {
     autoPlaying: true,
     internalAutoPlaying: true,
     slides: [
-      {
-        image: require("@/assets/images/banners/1.png"),
-      },
-      {
-        image: require("@/assets/images/banners/1.png"),
-      },
-      {
-        image: require("@/assets/images/banners/1.png"),
-      },
+      // {
+      //   image: require("@/assets/images/banners/1.png"),
+      // },
+      // {
+      //   image: require("@/assets/images/banners/1.png"),
+      // },
+      // {
+      //   image: require("@/assets/images/banners/1.png"),
+      // },
     ],
   }),
   mounted() {
@@ -95,7 +95,7 @@ a:hover {
   color: white;
 }
 ::v-deep .vueperslides__bullet .default {
-  background-color: #096866 !important;
+  background-color: #F9B410 !important;
 }
 
 a {

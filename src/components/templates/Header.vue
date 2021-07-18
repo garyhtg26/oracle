@@ -51,9 +51,9 @@
               </div>
 
               <b-nav-item to="/premium" class="mr-4">PREMIUM</b-nav-item>
-              <b-nav-item to="#" class="mr-4" @click="download">
+              <!-- <b-nav-item to="#" class="mr-4" @click="download">
                 DOWNLOAD
-              </b-nav-item>
+              </b-nav-item> -->
               <b-nav-item
                 v-if="!$store.state.user.name"
                 v-b-modal.modal-login

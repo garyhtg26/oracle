@@ -2,6 +2,9 @@
   <div class="d-flex flex-column sticky-footer-wrapper">
     <main class="flex-fill">
       <app-header></app-header>
+      <div class="page-heading">
+
+      
       <div class="container mt-3">
         <b-row>
           <b-col cols="12" md="6">
@@ -31,10 +34,11 @@
           </b-col>
         </b-row>
       </div>
+      </div>
 
       <message-component></message-component>
       <div class="container product" style="background-color: #232323;"></div>
-      <div class="container" style="background-color: #232323; margin-bottom:20px;">
+      <div class="container" style=" margin-bottom:20px;">
         <div class="row">
           <div class="col-md-12">
             <h6 class="mx-4 mt-4" style="color: white;">Mobile</h6>
@@ -150,6 +154,12 @@ export default {
 </script>
 
 <style>
+.page-heading{
+   background-image: url(../assets/images/bg.png);
+
+  background-size: contain;
+  opacity: 0.9;
+}
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
